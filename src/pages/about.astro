@@ -1,6 +1,9 @@
 ---
 // 文件名: src/pages/about.astro
 // 这里是Astro组件脚本区域，可以为空，但需保留分隔符
+const title = "关于-JSZK";
+
+const skillColor = "purple";
 ---
 
 <html lang="zh-cn">
@@ -9,7 +12,13 @@
     <link rel="icon" type="image/svg+xml" href="/ZK.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>关于-JSZK</title>
+    <title>{title}</title>
+    <style define:vars={{ skillColor }}>
+      h1 {
+        color: var(--skillColor);
+        font-size: 2em;
+      }
+    </style>
   </head>
 
   <body>

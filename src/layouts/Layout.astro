@@ -1,23 +1,162 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+// layout.astro
+import Button from "../components/btn2Idx.astro";
+import "../styles/global.css";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+const buttons = [
+  {
+    href: "https://gitee.com/czhaozm/JSZK/releases/download/v4.1.0.0/JSZK.zip",
+    label: "下载",
+    variant: "download",
+    logoColor: "#e60013",
+    iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
+      <path d="M12 3 L12 16" /> 
+      <path d="M8 13 L12 17 L16 13" /> 
+      <path d="M4 21 L20 21" />
+    </svg>`,
+  },
+  {
+    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
+    label: "教程",
+    variant: "vedio",
+    logoColor: "#f39800",
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;">BiliBili</p>`,
+  },
+  {
+    href: "./about/",
+    label: "海报",
+    variant: "other",
+    logoColor: "#8ec31f",
+    iconSvg: `<svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.49.49 0 0 1 .178-.554C23.028 18.48 24 16.82 24 14.98c0-3.21-2.931-5.952-7.062-6.122zM16.382 12.9c.534 0 .967.44.967.982a.975.975 0 0 1-.967.983.975.975 0 0 1-.967-.983c0-.542.433-.982.967-.982zm4.836 0c.534 0 .967.44.967.982a.975.975 0 0 1-.967.983.975.975 0 0 1-.967-.983c0-.542.433-.982.967-.982z"/>
+    </svg>`,
+  },
+];
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSZK- 轻松一键，键鼠智控</title>
+    <style>
+      /* ========== 上方淡蓝色区域 ========== */
+      .hero {
+        background: var(--primary);
+        text-align: center;
+        /* 底部留出足够空间给弧线 */
+        padding: 8% 24px 40px;
+        position: relative;
+        /* margin-bottom: 160px; */
+      }
+
+      /* 语言标识 */
+      /* .lang-tag {
+        display: inline-block;
+        font-size: 13px;
+        color: var(--text-secondary);
+         border: 1px solid #b3d9ff; 
+        border-radius: 20px;
+        padding: 4px 16px;
+        margin-bottom: 36px;
+        letter-spacing: 0.5px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(4px);
+      } */
+
+      /* Logo */
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* width: 72px;
+        height: 172px; */
+        gap: 16px;
+        margin: 0 auto 20px;
+      }
+      .logo img {
+        width: 68px;
+        height: 68px;
+        object-fit: contain;
+      }
+
+      /* 标题 */
+      .logo .title {
+        font-size: 48px;
+        font-weight: 600;
+        color: var(--white-text);
+        margin: 0;
+        padding: 0 0 8px 0;
+        letter-spacing: 2px;
+      }
+
+      .description {
+        font-size: 32px;
+        color: var(--white-text);
+        margin-bottom: 40px;
+        line-height: 1.8;
+      }
+
+      /* ========== 弧形分隔 ========== */
+      .hero::after {
+        content: "";
+        position: absolute;
+        /* 弧线高度 */
+        bottom: -120px;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        background: var(--primary);
+        /* 弧线弧度 */
+        border-radius: 0 0 50% 50% / 0 0 50% 50%;
+      }
+
+      /* 响应式 */
+      @media (max-width: 400px) {
+        .hero {
+          padding: 40px 20px 70px;
+          margin-bottom: 50px;
+        }
+        .hero::after {
+          bottom: -40px;
+          height: 50px;
+        }
+        .common-buttons {
+          max-width: 100%;
+          padding: 0 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Content淡蓝色背景区域 -->
+    <div class="hero">
+      <!-- <div class="lang-tag">简体中文</div> -->
+
+      <div class="logo animate-fade-in-up">
+        <img src="/ZK.ico" alt="键鼠智控" />
+        <h1 class="title">JSZK</h1>
+      </div>
+
+      <div class="description animate-fade-in-up">
+        <p>键鼠智控<br />轻松一键，告别重复操作！</p>
+      </div>
+
+      <Button {buttons} />
+    </div>
+
+    <!-- about底部白色区域 -->
+    <div class="footer">
+      <nav class="footer-links">
+        <a href="#">联系我们</a>
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+      </nav>
+
+      <p class="footer-copyright">
+        Copyright © 2023-2026 CZZM. All Rights Reserved.
+      </p>
+    </div>
+  </body>
+</html>

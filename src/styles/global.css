@@ -1,0 +1,99 @@
+/* src/styles/global.css */
+
+/* 1. 全局 CSS 变量 */
+:root {
+    --primary: #43b2f1;
+    --white-text: #ffff;
+    --black-text: #000000;
+    --text-secondary: #565656;
+    --white: #ffffff;
+    --border-gray: #d2d2d6;
+
+    --color-left: #8ec31f;
+    --color-center: #f39800;
+    --color-right: #e60013;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial,
+        sans-serif;
+    color: var(--white-text);
+    line-height: 1.6;
+    background: var(--white);
+}
+
+/* 底部连接通用 */
+.footer {
+    background: var(--white);
+    text-align: center;
+    padding: 32px 24px 40px;
+    margin: 100px +32px 0 0;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin: 12px 0;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+}
+
+.footer-links a:hover {
+    color: var(--primary);
+}
+
+.footer-links a:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background: #dcdcdc;
+}
+
+.footer-copyright {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    padding: 0;
+}
+
+/* 定义动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+        /* 从下方 30px 开始 */
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        /* 回到原位 */
+    }
+}
+
+/* 工具类：应用动画 */
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+    /* forwards 保留动画结束状态 */
+}
