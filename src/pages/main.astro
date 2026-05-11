@@ -30,7 +30,7 @@ const buttons: ButtonItem[] = [
     iconSvg: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M12 2L14.5 9.5H22L16 14.5L18.5 22L12 17.5L5.5 22L8 14.5L2 9.5H9.5L12 2Z" fill="white"/></svg>`,
   },
   {
-    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
+    href: "./blog/",
     label: "更多",
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
@@ -41,7 +41,7 @@ const buttons: ButtonItem[] = [
 
 <script lang="ts">
   const textLine1 = "轻松一键,";
-  const textLine2 = "告别重复操作";
+  const textLine2 = "告别所有重复操作";
   const speed = 100; // 打字速度（毫秒/字）
   const firstDelayTime = 1000;
 
@@ -52,7 +52,7 @@ const buttons: ButtonItem[] = [
   async function typeText(element, text) {
     for (let i = 0; i < text.length; i++) {
       // 逐字添加
-      if (i == 2) {
+      if (element.id === "line1" && i === 2) {
         // 第一个字后延迟1s
         await delay(firstDelayTime);
       }
@@ -185,7 +185,7 @@ const buttons: ButtonItem[] = [
   }
 </style>
 <div class="content">
-  <p class="lang-tag animate-fade-in-up">JSZK（CN）</p>
+  <p class="lang-tag animate-fade-in-up">JSZK</p>
 
   <div class="logo animate-fade-in-up">
     <img src="/ZK.ico" alt="键鼠智控" />
