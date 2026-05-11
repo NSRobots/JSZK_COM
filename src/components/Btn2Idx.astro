@@ -1,32 +1,28 @@
 ---
 import "../styles/global.css";
+import type { ButtonItem } from "../Interface/site";
 
 // Btn2Idx.astro
-// 接收一个 buttons 数组，每个按钮格式：
-// { href: string, label: string, variant: 'download' | 'learn' | 'other', iconSvg: string }
-const { buttons } = Astro.props as { buttons: ButtonItem[] };
-
-export interface ButtonItem {
-  href: string;
-  label: string;
-  variant?: string; // 类型
-  iconSvg: string;
-  logoColor: string; // 图标颜色
-}
+// 接收一个 ButtonItem 类型 数组
+const { items } = Astro.props as { items: ButtonItem[] };
 ---
 
 <div class="common-buttons animate-fade-in-up">
   {
-    buttons.map((btn: any) => (
-      <a
-        href={btn.href}
-        class={`btn ${btn.variant || ""}`}
-        aria-label={btn.label}
-        style={`color: ${btn.logoColor}`}
+    items.map((btn: any) => (
+      <div
+        class="btn"
+        style={`--btn-bg: ${btn.bgColor}; --hover-bg: var(--primary-light-l2)`}
       >
-        <span class="btn-icon" set:html={btn.iconSvg} />
-        <p>{btn.label}</p>
-      </a>
+        <a
+          href={btn.href}
+          aria-label={btn.label}
+          style={`color: ${btn.itemColor}; `}
+        >
+          <span class="btn-icon" set:html={btn.iconSvg} />
+          <p>{btn.label}</p>
+        </a>
+      </div>
     ))
   }
 </div>
@@ -42,13 +38,8 @@ export interface ButtonItem {
   }
 
   .btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 140px;
-    height: 140px;
+    width: 120px;
+    height: 120px;
     padding: 14px 20px;
     border-radius: 12px;
     font-size: 16px;
@@ -57,23 +48,35 @@ export interface ButtonItem {
     transition: all 0.25s ease;
     cursor: pointer;
     border: 1.5px solid transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    background: var(--white, #ffffff);
+    box-shadow: 0 1px 1px rgba(126, 126, 126, 0);
+    /* 使用 CSS 变量，初始值由内联样式提供 */
+    background-color: var(--btn-bg);
+  }
+
+  .btn a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; /* 去掉下划线 */
+    color: inherit; /* 继承文字颜色 */
+    gap: 10px;
+    box-sizing: border-box;
+    border-radius: 12px;
   }
 
   .btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  }
-
-  .btn p {
-    color: var(--black-text);
-    margin: 0;
+    /* 悬停背景色 */
+    background-color: var(--hover-bg);
   }
 
   .btn-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,17 +91,20 @@ export interface ButtonItem {
   /* ---------- 手机端适配（宽度 ≤ 768px） ---------- */
   @media (max-width: 768px) {
     .common-buttons {
-      flex-direction: column; /* 竖向排列 */
+      flex-direction: row;
+      flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 30px; /* 间距适当缩小 */
+      gap: 20px;
       max-width: 100%;
       padding: 0 16px;
     }
 
     .btn {
-      width: 130px; /* 手机端按钮稍小一点也很舒服 */
-      height: 130px;
+      width: 140px;
+      height: 140px;
+      aspect-ratio: 1 / 1;
+      box-sizing: border-box;
     }
   }
 </style>

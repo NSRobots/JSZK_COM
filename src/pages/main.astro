@@ -1,0 +1,201 @@
+---
+import Button from "../components/Btn2Idx.astro";
+import type { ButtonItem } from "../Interface/site";
+import "../styles/global.css";
+
+const buttons: ButtonItem[] = [
+  {
+    href: "https://gitee.com/czhaozm/JSZK/releases/download/v4.1.0.0/JSZK.zip",
+    label: "下载",
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
+      <path d="M12 3 L12 16" /> 
+      <path d="M8 13 L12 17 L16 13" /> 
+      <path d="M4 21 L20 21" />
+    </svg>`,
+  },
+  {
+    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
+    label: "教程",
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="13" rx="1" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></rect><rect x="4.5" y="4.5" width="15" height="10" rx="0.5" fill="none" stroke="currentColor" stroke-width="1"></rect> <rect x="9" y="17" width="6" height="1.5" rx="0.5" fill="currentColor"></rect> <rect x="11" y="16" width="2" height="2" fill="currentColor"></rect></svg>`,
+  },
+  {
+    href: "./about/",
+    label: "海报",
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M12 2L14.5 9.5H22L16 14.5L18.5 22L12 17.5L5.5 22L8 14.5L2 9.5H9.5L12 2Z" fill="white"/></svg>`,
+  },
+  {
+    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
+    label: "更多",
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;"><...></p>`,
+  },
+];
+---
+
+<script lang="ts">
+  const textLine1 = "轻松一键,";
+  const textLine2 = "告别重复操作";
+  const speed = 100; // 打字速度（毫秒/字）
+  const firstDelayTime = 1000;
+
+  async function delay(ms) {
+    return await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(element, text) {
+    for (let i = 0; i < text.length; i++) {
+      // 逐字添加
+      if (i == 2) {
+        // 第一个字后延迟1s
+        await delay(firstDelayTime);
+      }
+      element.textContent += text.charAt(i);
+      await delay(speed);
+    }
+  }
+
+  async function startTyping() {
+    const line1 = document.getElementById("line1");
+    const line2 = document.getElementById("line2");
+    if (!line1 || !line2) return;
+
+    // 先打第一行
+    line1.classList.add("typing-cursor");
+    await typeText(line1, textLine1);
+    line1.classList.remove("typing-cursor");
+    // 停顿片刻，再打第二行
+    await delay(400);
+    line2.classList.add("typing-cursor");
+    await typeText(line2, textLine2);
+    line2.classList.remove("typing-cursor");
+  }
+
+  // 页面加载完成后启动动画
+  document.addEventListener("DOMContentLoaded", startTyping);
+</script>
+
+<style>
+  /* ========== 上方淡蓝色区域 ========== */
+  .content {
+    background: var(--primary);
+    text-align: center;
+    /* 底部留出足够空间给弧线 */
+    padding: 140px 24px 40px;
+    position: relative;
+    /* margin-bottom: 160px; */
+  }
+
+  /* 语言标识 */
+  .lang-tag {
+    position: absolute;
+    top: 40px; /* 距离顶部的距离 */
+    right: 40px; /* 距离右侧的距离 */
+    font-size: 18px;
+    color: var(--gray);
+    padding: 4px 16px;
+    pointer-events: none;
+  }
+
+  /* Logo */
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto 20px;
+  }
+  .logo img {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+  }
+
+  /* 标题 */
+  .logo .title {
+    font-size: 48px;
+    font-weight: 600;
+    color: var(--white);
+    margin: 0;
+    padding: 0 0 8px 0;
+    letter-spacing: 2px;
+  }
+
+  .description {
+    height: 140px;
+    width: 100%;
+    font-size: 32px;
+    color: var(--white);
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+
+  /* ==== 打字机光标闪烁动画 ==== */
+  .typing-curso {
+    font-size: 24px;
+  }
+  .typing-cursor::after {
+    content: "|";
+    animation: blink 0.8s step-end infinite;
+    color: inherit;
+    user-select: none;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* ========== 弧形分隔 ========== */
+  .content::after {
+    content: "";
+    position: absolute;
+    /* 弧线高度 */
+    bottom: -120px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    background: var(--primary);
+    /* 弧线弧度 */
+    clip-path: ellipse(130% 100% at 50% 0%);
+    border-radius: 0 0 50% 50% / 0 0 50% 50%;
+  }
+
+  /* === 响应式 === */
+  @media (max-width: 400px) {
+    .content {
+      padding: 35% 20px 50px 20px;
+      margin-bottom: 50px;
+    }
+    .content::after {
+      bottom: -40px;
+      height: 50px;
+    }
+    .lang-tag {
+      position: absolute;
+      top: 2%;
+      right: 0.5%;
+    }
+  }
+</style>
+<div class="content">
+  <p class="lang-tag animate-fade-in-up">JSZK（CN）</p>
+
+  <div class="logo animate-fade-in-up">
+    <img src="/ZK.ico" alt="键鼠智控" />
+    <h1 class="title">键鼠智控</h1>
+  </div>
+
+  <div class="description animate-fade-in-up">
+    <p class="typing-line" id="line1"></p>
+    <p class="typing-line" id="line2"></p>
+  </div>
+
+  <Button items={buttons} />
+</div>
