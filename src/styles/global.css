@@ -87,14 +87,11 @@
         border-radius: 0 0 50% 50% / 0 0 50% 50%;
     }
 
-    @media (max-width: 500px) {
+    /* @media (max-width: 768px) {
         .arc-bottom::after {
-            /* bottom: -35px; */
-            background: var(--primary);
-            clip-path: ellipse(130% 100% at 50% 0%);
-            border-radius: 0 0 50% 50% / 0 0 50% 50%;
+            bottom: -35px;
         }
-    }
+    } */
 }
 
 @layer utilities {

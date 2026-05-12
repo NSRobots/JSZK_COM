@@ -8,7 +8,8 @@ const { item } = Astro.props as { item: ButtonItem };
 
 <div
   style={`--btn-bg: ${item.bgColor}; --hover-bg: var(--primary-light-l2)`}
-  class="w-[120px] h-[120px] p-[14px_20px] rounded-3xl text-base font-medium
+  class="w-[130px] h-[130px] max-md:w-[110px] max-md:h-[110px]
+        p-[14px_20px] rounded-3xl text-base font-medium
          transition-all duration-[250ms] cursor-pointer
          border border-transparent border-[1.5px]
          shadow-none bg-[var(--btn-bg)]
