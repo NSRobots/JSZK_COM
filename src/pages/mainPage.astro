@@ -1,5 +1,4 @@
 ---
-import { fade } from "astro:transitions";
 import Button from "../components/CubeBtn.astro";
 import type { ButtonItem } from "../Interface/site";
 
@@ -111,11 +110,11 @@ const buttons: ButtonItem[] = [
 
 <div
   style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
-  class="arc-bottom relative bg-[var(--primary)] text-center pb-10"
+  class="banner-body relative text-center pb-10"
 >
   <!-- 语言标签 -->
   <p
-    class="absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none animate-fade-in-up"
+    class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
   >
     JSZK
   </p>

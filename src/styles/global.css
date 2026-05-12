@@ -71,27 +71,28 @@
     }
 
     /* 弧形分隔复用 */
-    .arc-bottom {
+    .banner-body {
         position: relative;
+        background-color: var(--primary);
     }
 
-    .arc-bottom::after {
+    .banner-body::after {
         content: "";
         position: absolute;
-        bottom: -119px;
+        bottom: -59px;
         left: 0;
         width: 100%;
-        height: 120px;
+        height: 60px;
         background: var(--primary);
-        clip-path: ellipse(130% 100% at 50% 0%);
-        border-radius: 0 0 50% 50% / 0 0 50% 50%;
+        clip-path: ellipse(130% 100% at 60% 0%);
+        border-radius: 0 0 50% 50% / 0 0 60% 60%;
     }
 
-    /* @media (max-width: 768px) {
-        .arc-bottom::after {
+    @media (max-width: 768px) {
+        .banner-body::after {
             bottom: -35px;
         }
-    } */
+    }
 }
 
 @layer utilities {
