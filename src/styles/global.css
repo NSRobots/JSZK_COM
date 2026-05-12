@@ -1,102 +1,145 @@
-/* src/styles/global.css */
+@import "tailwindcss";
 
-/* 1. 全局 CSS 变量 */
-:root {
-    --primary: #43b2f1;
-    --primary-light: #3db7fd;
-    --primary-light-l2: #51bcfa;
-    --primary-dark: #00a0e9;
-    --white: #ffffff;
-    --gray: #ffffffc2;
-    --black-text: #000000;
-    --text-secondary: #565656;
+@layer base {
 
-    /* rainbow color */
-    --color-left: #8ec31f;
-    --color-center: #f39800;
-    --color-right: #e60013;
-}
+    /* 1. 全局 CSS 变量 */
+    :root {
+        --primary: #43b2f1;
+        --primary-light: #3db7fd;
+        --primary-light-l2: #51bcfa;
+        --primary-dark: #00a0e9;
+        --white: #ffffff;
+        --gray: #ffffffc2;
+        --black-text: #000000;
+        --text-secondary: #565656;
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-        "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial,
-        sans-serif;
-    color: var(--white);
-    line-height: 1.6;
-    background: var(--white);
-}
-
-/* 底部连接通用 */
-.footer {
-    background: var(--white);
-    text-align: center;
-    padding: 32px 24px 40px;
-    margin: 132px 0 0 0;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    flex-wrap: wrap;
-    font-size: 15px;
-    color: var(--text-secondary);
-    margin: 12px 0;
-}
-
-.footer-links a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color 0.2s;
-    position: relative;
-}
-
-.footer-links a:hover {
-    color: var(--primary);
-}
-
-.footer-links a:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    right: -16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1px;
-    height: 12px;
-    background: #dcdcdc;
-}
-
-.footer-copyright {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin: 0;
-    padding: 0;
-}
-
-/* 定义动画 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-        /* 从下方 30px 开始 */
+        /* rainbow color */
+        --color-left: #8ec31f;
+        --color-center: #f39800;
+        --color-right: #e60013;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        /* 回到原位 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family:
+            -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+            "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial,
+            sans-serif;
+        color: var(--white);
+        line-height: 1.6;
+        background: var(--white);
     }
 }
 
-/* 工具类：应用动画 */
-.animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-    /* forwards 保留动画结束状态 */
+@layer components {
+
+    /* 底部区域通用样式（如果多处使用可保留为组件类） */
+    .footer {
+        @apply bg-white text-center py-8 px-6 mt-[132px];
+    }
+
+    .footer-links {
+        @apply flex justify-center gap-8 flex-wrap text-[15px] text-[var(--text-secondary)] my-3;
+    }
+
+    .footer-links a {
+        @apply text-[var(--text-secondary)] no-underline transition-colors duration-200 relative;
+    }
+
+    .footer-links a:hover {
+        color: var(--primary);
+    }
+
+    .footer-links a:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: -16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 12px;
+        background: #dcdcdc;
+    }
+
+    .footer-copyright {
+        @apply text-sm text-[var(--text-secondary)] m-0 p-0;
+    }
+
+    /* 弧形分隔复用 */
+    .arc-bottom {
+        position: relative;
+    }
+
+    .arc-bottom::after {
+        content: "";
+        position: absolute;
+        bottom: -119px;
+        left: 0;
+        width: 100%;
+        height: 120px;
+        background: var(--primary);
+        clip-path: ellipse(130% 100% at 50% 0%);
+        border-radius: 0 0 50% 50% / 0 0 50% 50%;
+    }
+
+    @media (max-width: 500px) {
+        .arc-bottom::after {
+            /* bottom: -35px; */
+            background: var(--primary);
+            clip-path: ellipse(130% 100% at 50% 0%);
+            border-radius: 0 0 50% 50% / 0 0 50% 50%;
+        }
+    }
+}
+
+@layer utilities {
+
+    /* 打字光标动画 */
+    .typing-cursor::after {
+        content: "|";
+        animation: blink 0.8s step-end infinite;
+        color: inherit;
+        user-select: none;
+    }
+
+    @keyframes blink {
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* 淡入上移动画（保留旧工具类名） */
+    .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 移动端适配：小屏时 content 的上内边距 */
+    @media (max-width: 400px) {
+        .content-padding-sm {
+            padding-top: 35%;
+            padding-bottom: 50px;
+        }
+
+        .lang-tag-sm {
+            top: 2%;
+            right: 0.5%;
+        }
+    }
 }

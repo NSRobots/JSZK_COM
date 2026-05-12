@@ -1,0 +1,33 @@
+---
+import type { ButtonItem } from "../Interface/site";
+
+// Btn2Idx.astro
+// 接收一个 ButtonItem 类型 数组
+const { item } = Astro.props as { item: ButtonItem };
+---
+
+<div
+  style={`--btn-bg: ${item.bgColor}; --hover-bg: var(--primary-light-l2)`}
+  class="w-[120px] h-[120px] p-[14px_20px] rounded-3xl text-base font-medium
+         transition-all duration-[250ms] cursor-pointer
+         border border-transparent border-[1.5px]
+         shadow-none bg-[var(--btn-bg)]
+         hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)]
+         hover:bg-[var(--primary-light-l2)]"
+>
+  <a
+    href={item.href}
+    aria-label={item.label}
+    style={`color: ${item.itemColor}; `}
+    target={item.isRedirect ? "_blank" : "_self"}
+    class="flex flex-col items-center justify-center w-full h-full
+           no-underline gap-2.5 box-border rounded-xl"
+  >
+    <span
+      set:html={item.iconSvg}
+      class="flex items-center justify-center w-10 h-10
+             [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
+    />
+    <p>{item.label}</p>
+  </a>
+</div>
