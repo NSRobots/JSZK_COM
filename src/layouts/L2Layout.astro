@@ -1,0 +1,39 @@
+---
+import "../styles/global.css";
+// L2Layout.astro
+
+const hasSidebar = Astro.slots.has("sidebar");
+---
+
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>键鼠智控，轻松一键，告别重复</title>
+    <link rel="icon" type="image/x-icon" href="/ZK.ico" />
+  </head>
+  <body class="font-sans text-gray-900 bg-white">
+    <!-- header -->
+    <slot name="header" />
+
+    <!-- main content -->
+    <div class="min-h-screen bg-white flex flex-col md:flex-row">
+      <!-- 左侧侧边栏 -->
+      {
+        hasSidebar && (
+          <aside class="md:w-64 bg-gray-50 border-b md:border-r border-gray-200 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:overflow-y-auto">
+            <div class="p-4">
+              <slot name="sidebar" />
+            </div>
+          </aside>
+        )
+      }
+
+      <!-- 内容区域 -->
+      <slot name="content" />
+    </div>
+
+    <slot name="footer" />
+  </body>
+</html>

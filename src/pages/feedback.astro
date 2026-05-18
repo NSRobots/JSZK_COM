@@ -1,0 +1,155 @@
+---
+// contact.astro
+
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<style>
+  /* 弧形分隔复用 */
+  .banner-body {
+    position: relative;
+    background-color: var(--primary);
+  }
+
+  .banner-body::after {
+    content: "";
+    position: absolute;
+    bottom: -59px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--primary);
+    clip-path: ellipse(130% 100% at 60% 0%);
+    border-radius: 0 0 50% 50% / 0 0 60% 60%;
+  }
+
+  @media (max-width: 768px) {
+    .banner-body::after {
+      bottom: -35px;
+    }
+  }
+</style>
+
+<Layout>
+  <div
+    slot="content"
+    style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
+    class="banner-body relative text-center pb-10"
+  >
+    <!-- 返回首页 -->
+    <a
+      href="/"
+      class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 hover:text-[var(--white)] transition-colors duration-300"
+      aria-label="返回首页"
+    >
+      &lt;--
+    </a>
+    <!-- 语言标签 -->
+    <p
+      class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
+    >
+      JSZK
+    </p>
+
+    <p
+      class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
+    >
+      &lt;-
+    </p>
+
+    <!-- logo & title -->
+    <div
+      class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
+    >
+      <a href="/" class="inline-flex items-center justify-center gap-2">
+        <img
+          src="/ZK.ico"
+          alt="键鼠智控"
+          class="w-[56px] h-[56px] object-contain"
+        />
+        <h1
+          class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1"
+        >
+          问题反馈
+        </h1>
+      </a>
+    </div>
+
+    <!-- typing animate - 主内容区域 -->
+    <div
+      class="animate-fade-in-up w-full text-[var(--white)] mt-10 mb-10 leading-[1.8] min-h-[400px]"
+    >
+      <!-- 缩小字体的前两行 -->
+      <div class="text-[18px] md:text-[22px] mb-8">
+        <p class="typing-line">若您在使用中遇到未知的问题</p>
+        <p class="typing-line">请及时反馈给我们,</p>
+        <p class="typing-line">我们将用心解决你遇到的问题:)</p>
+      </div>
+      <!-- 标准字体的后续行 -->
+      <div class="text-[22px] md:text-[32px]">
+        <p class="typing-line" id="line1"></p>
+        <p class="typing-line" id="line2"></p>
+        <p class="typing-line" id="line3"></p>
+        <p class="typing-line" id="line4"></p>
+        <p class="typing-line" id="line5"></p>
+      </div>
+    </div>
+  </div>
+  <Footer slot="footer" />
+</Layout>
+<script lang="ts">
+  const textLine1 = "软件交流互助QQ群：516765146";
+  const textLine2 = "官方客服QQ：926498080";
+  const textLine3 = "电子邮箱：czhaozm@qq.com";
+  const textLine4 = "微信公众号/抖音/哔哩哔哩：";
+  const textLine5 = "创赵智码";
+  const speed = 50; // 打字速度（毫秒/字）
+  const firstDelayTime = 320;
+  const betweenLinesDelay = 400; // 行与行之间的延迟
+
+  async function delay(ms) {
+    return await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(element, text) {
+    for (let i = 0; i < text.length; i++) {
+      // 逐字添加
+      if (element.id === "line1" && i === 2) {
+        // 第一个字后延迟
+        await delay(firstDelayTime);
+      }
+      element.textContent += text.charAt(i);
+      await delay(speed);
+    }
+  }
+
+  async function startTyping() {
+    const lines = [
+      { id: "line1", text: textLine1 },
+      { id: "line2", text: textLine2 },
+      { id: "line3", text: textLine3 },
+      { id: "line4", text: textLine4 },
+      { id: "line5", text: textLine5 },
+    ];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = document.getElementById(lines[i].id);
+      if (!line) continue;
+
+      // 添加光标
+      line.classList.add("typing-cursor");
+      await typeText(line, lines[i].text);
+      // 移除光标
+      line.classList.remove("typing-cursor");
+
+      // 如果不是最后一行，添加行间延迟
+      if (i < lines.length - 1) {
+        await delay(betweenLinesDelay);
+      }
+    }
+  }
+
+  // 页面加载完成后启动动画
+  document.addEventListener("DOMContentLoaded", startTyping);
+</script>

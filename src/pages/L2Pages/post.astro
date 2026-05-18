@@ -1,0 +1,250 @@
+---
+import { postImages } from "../../data/postDatas";
+// post.astro
+---
+
+<div
+  class="flex flex-col justify-center p-4 md:p-8 w-full min-h-screen flex-1 p-4 md:p-6 overflow-auto"
+>
+  <!-- 标题区 -->
+  <div
+    class="mb-8 md:mb-12 flex items-center gap-3 border-l-4 border-red-600 pl-3"
+  >
+    <h2 class="text-xl md:text-2xl font-bold text-gray-900">关注我们</h2>
+    <span class="text-gray-500 tracking-widest text-sm md:text-lg">
+      Subscribe Our Team
+    </span>
+  </div>
+
+  <!-- 轮播海报区 -->
+  <div
+    class="relative mb-8 md:mb-12 w-full max-w-4xl mx-auto h-[32rem] md:h-[40rem]"
+  >
+    <div
+      id="carouselContainer"
+      class="relative w-full h-full perspective-1000 overflow-hidden"
+    >
+      <!-- 由 JS 动态生成两张图片用于风车翻转 -->
+    </div>
+  </div>
+
+  <!-- 换页按钮区 -->
+  <div class="flex justify-center items-center gap-4">
+    <button
+      id="prevBtn"
+      class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-40 transition-colors"
+    >
+      ←
+    </button>
+    <span
+      id="pageIndicator"
+      class="text-sm md:text-base font-medium text-gray-700"
+    >
+      1 / {postImages.length}
+    </span>
+    <button
+      id="nextBtn"
+      class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-40 transition-colors"
+    >
+      →
+    </button>
+  </div>
+
+  <!-- 图片放大模态框 -->
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/90"
+  >
+    <img
+      id="lightboxImg"
+      class="max-w-[90vw] max-h-[90vh] object-contain"
+      src=""
+      alt="放大预览图"
+    />
+  </div>
+</div>
+
+<style>
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+</style>
+
+<script define:vars={{ postImages }}>
+  // --- DOM 引用 ---
+  const carouselContainer = document.getElementById("carouselContainer");
+  const pageIndicator = document.getElementById("pageIndicator");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+
+  const totalImages = postImages.length;
+  let currentIndex = 0;
+  let autoPlayTimer = null;
+  let isAnimating = false;
+  let frontImage, backImage;
+  let frontIsActive = true; // 标记当前哪张图是"正面朝上"
+
+  // ========== 工具函数 ==========
+  function updateIndicator() {
+    if (pageIndicator) {
+      pageIndicator.textContent = `${currentIndex + 1} / ${totalImages}`;
+    }
+    if (prevBtn) prevBtn.disabled = currentIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentIndex === totalImages - 1;
+  }
+
+  // 创建风车翻转轮播
+  function createCarousel() {
+    carouselContainer.innerHTML = `
+      <img id="frontImage" class="absolute inset-0 w-full h-full object-contain rounded-lg backface-hidden transition-transform duration-700 [transform-style:preserve-3d]" src="" alt="" />
+      <img id="backImage" class="absolute inset-0 w-full h-full object-contain rounded-lg backface-hidden transition-transform duration-700 [transform-style:preserve-3d] [transform:rotateY(180deg)]" src="" alt="" />
+    `;
+
+    frontImage = document.getElementById("frontImage");
+    backImage = document.getElementById("backImage");
+    frontIsActive = true;
+
+    // 重置到第一张
+    currentIndex = 0;
+    frontImage.src = postImages[0].src;
+    frontImage.alt = postImages[0].alt;
+    backImage.src = postImages[0].src;
+    backImage.alt = postImages[0].alt;
+    frontImage.style.transform = "rotateY(0deg)";
+    backImage.style.transform = "rotateY(180deg)";
+
+    updateIndicator();
+  }
+
+  // 执行风车翻转动画
+  function flipToNext(direction = 1) {
+    if (isAnimating) return;
+
+    // 计算新索引（支持循环）
+    let newIndex = currentIndex + direction;
+    if (newIndex < 0) {
+      newIndex = totalImages - 1; // 循环到最后一张
+    } else if (newIndex >= totalImages) {
+      newIndex = 0; // 循环到第一张
+    }
+
+    isAnimating = true;
+    const nextImg = postImages[newIndex];
+
+    // 决定哪张图要翻转消失，哪张要翻转出现
+    if (frontIsActive) {
+      frontImage.style.transform = "rotateY(180deg)";
+      backImage.src = nextImg.src;
+      backImage.alt = nextImg.alt;
+      backImage.style.transform = "rotateY(0deg)";
+    } else {
+      backImage.style.transform = "rotateY(180deg)";
+      frontImage.src = nextImg.src;
+      frontImage.alt = nextImg.alt;
+      frontImage.style.transform = "rotateY(0deg)";
+    }
+
+    // 切换前后状态标记
+    frontIsActive = !frontIsActive;
+    currentIndex = newIndex;
+    updateIndicator();
+
+    // 动画结束后释放锁
+    setTimeout(() => {
+      isAnimating = false;
+    }, 700); // 与 CSS duration 保持一致
+  }
+
+  // ========== 自动播放 ==========
+  function startAutoPlay() {
+    stopAutoPlay();
+    autoPlayTimer = setInterval(() => {
+      flipToNext(1);
+    }, 3000);
+  }
+
+  function stopAutoPlay() {
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
+    }
+  }
+
+  // ========== 按钮事件 ==========
+  function bindButtonEvents() {
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        stopAutoPlay();
+        flipToNext(-1);
+      };
+    }
+
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        stopAutoPlay();
+        flipToNext(1);
+      };
+    }
+  }
+
+  // ========== Lightbox ==========
+  if (carouselContainer) {
+    carouselContainer.addEventListener("click", (e) => {
+      const img = e.target.closest("img");
+      if (img && img.src && lightbox && lightboxImg) {
+        lightboxImg.src = img.src;
+        lightbox.classList.remove("hidden");
+        lightbox.classList.add("flex");
+      }
+    });
+  }
+
+  if (lightbox) {
+    lightbox.addEventListener("click", () => {
+      lightbox.classList.add("hidden");
+      lightbox.classList.remove("flex");
+      if (document.fullscreenElement) document.exitFullscreen();
+    });
+  }
+
+  // ========== 键盘事件 ==========
+  document.addEventListener("keydown", (e) => {
+    if (lightbox && !lightbox.classList.contains("hidden")) return;
+
+    if (e.key === "ArrowLeft") {
+      stopAutoPlay();
+      flipToNext(-1);
+    }
+    if (e.key === "ArrowRight") {
+      stopAutoPlay();
+      flipToNext(1);
+    }
+  });
+
+  // ========== 初始化 ==========
+  function init() {
+    createCarousel();
+    bindButtonEvents();
+    startAutoPlay();
+
+    // 鼠标悬停时暂停自动播放
+    carouselContainer.addEventListener("mouseenter", stopAutoPlay);
+    carouselContainer.addEventListener("mouseleave", startAutoPlay);
+  }
+
+  // 页面加载完成后初始化
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  // 页面卸载清理
+  window.addEventListener("beforeunload", stopAutoPlay);
+  window.addEventListener("pagehide", stopAutoPlay);
+</script>

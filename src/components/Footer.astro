@@ -1,0 +1,46 @@
+---
+// Footer.astro
+---
+
+<div class="footer bg-[var(--white)] text-center py-8 px-6 mt-[132px]">
+  <nav
+    class="footer-links flex justify-center gap-8 flex-wrap text-[15px] text-[var(--text-secondary)] my-3"
+  >
+    <a
+      href="/contact/"
+      class="no-underline transition-colors duration-200 relative hover:text-[var(--primary)]"
+    >
+      联系我们
+    </a>
+    <a
+      href="#"
+      class="no-underline transition-colors duration-200 relative hover:text-[var(--primary)]"
+    >
+      服务条款
+    </a>
+    <a
+      href="#"
+      class="no-underline transition-colors duration-200 relative hover:text-[var(--primary)]"
+    >
+      隐私政策
+    </a>
+  </nav>
+
+  <p class="footer-copyright text-sm text-[var(--text-secondary)] m-0 p-0">
+    Copyright &copy; 2020-2026 CZZM.Team All Rights Reserved.
+  </p>
+</div>
+
+<style>
+  /* 保留的唯一样式：链接之间的分隔线 */
+  .footer-links a:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 12px;
+    background: #dcdcdc;
+  }
+</style>

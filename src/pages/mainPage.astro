@@ -1,70 +1,77 @@
 ---
 import Button from "../components/CubeBtn.astro";
 import type { ButtonItem } from "../Interface/site";
-
-const buttons: ButtonItem[] = [
-  {
-    href: "https://github.com/czhaozm/JSZK/releases/download/jszk/JSZK.zip",
-    label: "下载",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: true,
-    iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
-      <path d="M12 3 L12 16" /> 
-      <path d="M8 13 L12 17 L16 13" /> 
-      <path d="M4 21 L20 21" />
-    </svg>`,
-  },
-  {
-    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
-    label: "教程",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: true,
-    iconSvg: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="13" rx="1" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"></rect><rect x="4.5" y="4.5" width="15" height="10" rx="0.5" fill="none" stroke="currentColor" stroke-width="1"></rect> <rect x="9" y="17" width="6" height="1.5" rx="0.5" fill="currentColor"></rect> <rect x="11" y="16" width="2" height="2" fill="currentColor"></rect></svg>`,
-  },
-  {
-    href: "https://www.bilibili.com/video/BV1Vqjpz5ETy",
-    label: "海报",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: false,
-    iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect> <circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="3 16 7 12 11 14 21 6"></polyline></svg>`,
-  },
-  {
-    href: "./about/",
-    label: "代言",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: false,
-    iconSvg: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10"/><path d="M12 2L14.5 9.5H22L16 14.5L18.5 22L12 17.5L5.5 22L8 14.5L2 9.5H9.5L12 2Z" fill="white"/></svg>`,
-  },
-  {
-    href: "https://chat.deepseek.com/",
-    label: "AI",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: true,
-    iconSvg: `<p style="font-size: 25px; font-weight: bold;">Agent</p>`,
-  },
-  {
-    href: "/about/",
-    label: "反馈",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: true,
-    iconSvg: `<p style="font-size: 25px; font-weight: bold;">Q&A</p>`,
-  },
-  {
-    href: "./blog/",
-    label: "更多",
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: false,
-    iconSvg: `<p style="font-size: 25px; font-weight: bold;"><...></p>`,
-  },
-];
+import { cubeBtns } from "../data/btnDatas";
 ---
+
+<style>
+  /* 弧形分隔复用 */
+  .banner-body {
+    position: relative;
+    background-color: var(--primary);
+  }
+
+  .banner-body::after {
+    content: "";
+    position: absolute;
+    bottom: -59px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--primary);
+    clip-path: ellipse(130% 100% at 60% 0%);
+    border-radius: 0 0 50% 50% / 0 0 60% 60%;
+  }
+
+  @media (max-width: 768px) {
+    .banner-body::after {
+      bottom: -35px;
+    }
+  }
+</style>
+
+<div
+  style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
+  class="banner-body relative text-center pb-10"
+>
+  <!-- 语言标签 -->
+  <p
+    class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
+  >
+    JSZK
+  </p>
+
+  <!-- logo & title -->
+  <div
+    class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
+  >
+    <img
+      src="/ZK.ico"
+      alt="键鼠智控"
+      class="w-[56px] h-[56px] object-contain"
+    />
+    <h1
+      class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1"
+    >
+      键鼠智控
+    </h1>
+  </div>
+
+  <!-- typing animate -->
+  <div
+    class="animate-fade-in-up h-[140px] w-full text-3xl text-[var(--white)] mt-10 mb-10 leading-[1.8]"
+  >
+    <p class="typing-line" id="line1"></p>
+    <p class="typing-line" id="line2"></p>
+  </div>
+
+  <!-- button box -->
+  <div
+    class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4"
+  >
+    {cubeBtns.map((btn: ButtonItem) => <Button item={btn} />)}
+  </div>
+</div>
 
 <script lang="ts">
   const textLine1 = "轻松一键,";
@@ -107,46 +114,3 @@ const buttons: ButtonItem[] = [
   // 页面加载完成后启动动画
   document.addEventListener("DOMContentLoaded", startTyping);
 </script>
-
-<div
-  style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
-  class="banner-body relative text-center pb-10"
->
-  <!-- 语言标签 -->
-  <p
-    class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
-  >
-    JSZK
-  </p>
-
-  <!-- logo & title -->
-  <div
-    class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
-  >
-    <img
-      src="/ZK.ico"
-      alt="键鼠智控"
-      class="w-[56px] h-[56px] object-contain"
-    />
-    <h1
-      class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1"
-    >
-      键鼠智控
-    </h1>
-  </div>
-
-  <!-- typing animate -->
-  <div
-    class="animate-fade-in-up h-[140px] w-full text-3xl text-[var(--white)] mt-10 mb-10 leading-[1.8]"
-  >
-    <p class="typing-line" id="line1"></p>
-    <p class="typing-line" id="line2"></p>
-  </div>
-
-  <!-- button box -->
-  <div
-    class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4"
-  >
-    {buttons.map((btn: ButtonItem) => <Button item={btn} />)}
-  </div>
-</div>

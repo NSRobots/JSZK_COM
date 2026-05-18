@@ -1,0 +1,194 @@
+---
+import { commonItems } from "../data/btnDatas";
+// L2Header.astro
+---
+
+<div
+  class="sticky top-0 z-50 text-white w-full px-5 flex items-center bg-[var(--primary)]"
+>
+  <div class="left-0 right-0 px-4 py-4 flex items-center">
+    <!-- Logo & title -->
+    <div
+      class="w-7 h-7 bg-white text-[#4CAF50] rounded flex items-center justify-center font-bold mr-3 shrink-0"
+    >
+      <a href="/">
+        <img
+          src="/public/ZK.ico"
+          alt="Logo"
+          class="w-full h-full object-contain"
+        />
+      </a>
+    </div>
+    <span class="text-2xl font-bold"><a href="/">键鼠智控 </a></span>
+  </div>
+
+  <!-- 移动端菜单遮罩层 -->
+  <div
+    id="mobileMenuOverlay"
+    class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"
+  >
+  </div>
+
+  <!-- 桌面端顶部导航 -->
+  <nav class="ml-auto hidden md:flex items-center space-x-6">
+    {
+      Object.values(commonItems).map((item) => (
+        <a
+          href={item.href}
+          target={item.isRedirect ? "_blank" : "_self"}
+          class="hover:text-gray-200 hover:underline underline-offset-4 decoration-2 transition-all duration-200 px-3"
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <!-- 移动端侧边栏 -->
+  <div
+    id="mobileSidebar"
+    class="fixed top-0 left-[-100%] w-50 h-full bg-[var(--primary)] shadow-lg z-50 transition-all duration-300 md:hidden"
+  >
+    <div class="p-4 border-b border-white/20">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <div
+            class="w-7 h-7 bg-white text-[#4CAF50] rounded flex items-center justify-center font-bold mr-3"
+          >
+            <a href="/">
+              <img
+                src="/public/ZK.ico"
+                alt="Logo"
+                class="w-full h-full object-contain"
+              />
+            </a>
+          </div>
+          <span class="text-xl font-bold">键鼠智控</span>
+        </div>
+        <button
+          id="closeMobileMenu"
+          class="p-2 hover:bg-white/10 rounded transition-colors"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="p-4">
+      <nav class="flex flex-col space-y-4">
+        {
+          Object.values(commonItems).map((item) => (
+            <a
+              href={item.href}
+              target={item.isRedirect ? "_blank" : "_self"}
+              class="py-3 px-4 hover:bg-white/10 hover:underline rounded transition-colors duration-200"
+              onclick="closeMobileMenu()"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+
+  <!-- 移动端菜单按钮 -->
+  <button id="mobileMenuButton" class="ml-auto md:hidden p-2">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+</div>
+
+<script lang="ts">
+  // 获取DOM元素
+  const mobileMenuButton = document.getElementById("mobileMenuButton");
+  const mobileSidebar = document.getElementById("mobileSidebar");
+  const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+  const closeMobileMenuBtn = document.getElementById("closeMobileMenu");
+
+  // 打开移动端菜单
+  function openMobileMenu() {
+    mobileSidebar.style.left = "0";
+    mobileMenuOverlay.style.display = "block";
+    // 防止背景滚动
+    document.body.style.overflow = "hidden";
+  }
+
+  // 关闭移动端菜单
+  function closeMobileMenu() {
+    mobileSidebar.style.left = "-100%";
+    mobileMenuOverlay.style.display = "none";
+    // 恢复滚动
+    document.body.style.overflow = "";
+  }
+
+  // 事件监听
+  if (mobileMenuButton) {
+    mobileMenuButton.addEventListener("click", openMobileMenu);
+  }
+
+  if (closeMobileMenuBtn) {
+    closeMobileMenuBtn.addEventListener("click", closeMobileMenu);
+  }
+
+  if (mobileMenuOverlay) {
+    mobileMenuOverlay.addEventListener("click", closeMobileMenu);
+  }
+
+  // ESC键关闭菜单
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileMenu();
+    }
+  });
+
+  // 点击导航链接时关闭菜单（在链接上已添加onclick）
+  // 但还需要添加事件委托以防动态内容
+  document.addEventListener("click", (event) => {
+    if (
+      event.target &&
+      event.target.matches(
+        "#mobileSidebar a[href]:not(#closeMobileMenu, #mobileMenuButton)",
+      )
+    ) {
+      closeMobileMenu();
+    }
+  });
+</script>
+
+<style>
+  /* 添加过渡动画 */
+  #mobileSidebar {
+    /* ...其他属性... */
+    z-index: 40;
+  }
+
+  /* 防止在移动端菜单打开时滚动背景 */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  /* 遮罩层动画 */
+  #mobileMenuOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色 */
+    display: none; /* 初始隐藏 */
+  }
+</style>
