@@ -1,7 +1,7 @@
 ---
 import Button from "../components/CubeBtn.astro";
 import type { CubeBtn } from "../Interface/site";
-import { cubeBtns } from "../data/btnDatas";
+import { dlChannels } from "../data/btnDatas";
 ---
 
 <style>
@@ -34,6 +34,14 @@ import { cubeBtns } from "../data/btnDatas";
   style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
   class="banner-body relative text-center pb-10"
 >
+  <!-- 返回首页 -->
+  <a
+    href="/"
+    class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 hover:text-[var(--white)] transition-colors duration-300"
+    aria-label="返回首页"
+  >
+    &lt;--
+  </a>
   <!-- 语言标签 -->
   <p
     class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
@@ -59,35 +67,49 @@ import { cubeBtns } from "../data/btnDatas";
 
   <!-- typing animate -->
   <div
-    class="animate-fade-in-up h-[140px] w-full text-3xl text-[var(--white)] mt-10 mb-10 leading-[1.8]"
+    id="contact-lines"
+    class="animate-fade-in-up h-[140px] w-full text-3xl text-[var(--white)] mt-10 leading-[1.8] text-[18px] md:text-[28px]"
   >
-    <p class="typing-line" id="line1"></p>
-    <p class="typing-line" id="line2"></p>
   </div>
 
   <!-- button box -->
   <div
     class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4"
   >
-    {cubeBtns.map((btn: CubeBtn) => <Button item={btn} />)}
+    {dlChannels.map((btn: CubeBtn) => <Button item={btn} />)}
   </div>
 </div>
 
 <script lang="ts">
-  const textLine1 = "轻松一键,";
-  const textLine2 = "告别所有重复操作";
+  const typingText = `请选择下载方式`;
+
   const speed = 50; // 打字速度（毫秒/字）
   const firstDelayTime = 320;
+  const betweenLinesDelay = 400; // 行与行之间的延迟
 
   async function delay(ms) {
     return await new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   async function typeText(element, text) {
+    element.textContent = "";
     for (let i = 0; i < text.length; i++) {
       // 逐字添加
       if (element.id === "line1" && i === 2) {
-        // 第一个字后延迟1s
+        // 第一个字后延迟
+        await delay(firstDelayTime);
+      }
+      element.textContent += text.charAt(i);
+      await delay(speed);
+    }
+  }
+
+  async function typeText(element, text) {
+    element.textContent = "";
+    for (let i = 0; i < text.length; i++) {
+      // 逐字添加
+      if (element.id === "line1" && i === 2) {
+        // 第一个字后延迟
         await delay(firstDelayTime);
       }
       element.textContent += text.charAt(i);
@@ -96,19 +118,33 @@ import { cubeBtns } from "../data/btnDatas";
   }
 
   async function startTyping() {
-    const line1 = document.getElementById("line1");
-    const line2 = document.getElementById("line2");
-    if (!line1 || !line2) return;
+    // 1. 按 \n 分割文本
+    const linesArray = typingText.split("\n");
+    const container = document.getElementById("contact-lines");
+    if (!container) return;
 
-    // 先打第一行
-    line1.classList.add("typing-cursor");
-    await typeText(line1, textLine1);
-    line1.classList.remove("typing-cursor");
-    // 停顿片刻，再打第二行
-    await delay(400);
-    line2.classList.add("typing-cursor");
-    await typeText(line2, textLine2);
-    line2.classList.remove("typing-cursor");
+    // 2. 清空容器并动态创建 p 标签
+    container.innerHTML = "";
+    const typedElements = [];
+
+    linesArray.forEach((lineText) => {
+      const p = document.createElement("p");
+      p.className = "typing-line";
+      container.appendChild(p);
+      typedElements.push(p);
+    });
+
+    // 3. 逐行动画
+    for (let i = 0; i < typedElements.length; i++) {
+      const el = typedElements[i];
+      el.classList.add("typing-cursor"); // 显示光标
+      await typeText(el, linesArray[i], i);
+      el.classList.remove("typing-cursor"); // 移除光标
+
+      if (i < typedElements.length - 1) {
+        await delay(betweenLinesDelay);
+      }
+    }
   }
 
   // 页面加载完成后启动动画
