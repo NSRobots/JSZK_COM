@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from "astro:content";
+// 定义组件接收的 props
+interface Props {
+  // 文章的内容组件（由内容集合提供）
+  Content: CollectionEntry<"blogs">["render"]["Content"];
+  // 文章的 frontmatter 数据，如标题、日期等
+  frontmatter: CollectionEntry<"blog">["data"];
+}
+
+const { Content, frontmatter } = Astro.props as Props;
+---
+
+<article>
+  <h1>{frontmatter.title}</h1>
+  <time datetime={frontmatter.date.toISOString()}>
+    {frontmatter.date.toLocaleDateString()}
+  </time>
+  <!-- 渲染 Markdown 正文 -->
+  <div class="prose">
+    <Content />
+  </div>
+</article>

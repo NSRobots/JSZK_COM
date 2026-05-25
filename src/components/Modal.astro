@@ -1,0 +1,151 @@
+---
+export interface ModalProps {
+  /** 弹窗宽度（PC端） */
+  width?: string;
+  /** 弹窗高度（PC端） */
+  height?: string;
+  /** 弹窗背景透明度（0-1） */
+  backgroundOpacity?: number;
+  /** 是否显示关闭按钮 */
+  showCloseButton?: boolean;
+}
+
+const {
+  width = "30vw",
+  height = "30vh",
+  backgroundOpacity = 0.95, // 白色背景95%不透明度
+  showCloseButton = true,
+} = Astro.props;
+---
+
+<slot name="trigger" />
+
+<div
+  class="modal fixed top-1/2 left-1/2
+         -translate-x-1/2 -translate-y-1/2 scale-95
+         rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.15)]
+         overflow-hidden
+         transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+         max-md:w-[90vw]! max-md:h-auto! max-md:max-h-[80vh]
+         opacity-0 invisible pointer-events-none isolate"
+  style={`
+    width: ${width}; 
+    height: ${height};
+    background-color: rgba(255, 255, 255, ${backgroundOpacity});
+    clip-path: inset(0 round 1rem);
+    will-change: transform, opacity;
+  `}
+  data-modal
+>
+  <!-- 关闭按钮 -->
+  {
+    showCloseButton && (
+      <button
+        class="modal-close absolute top-4 right-4 w-8 h-8 z-10
+               border-none bg-gray-100/80 backdrop-blur-sm rounded-full
+               text-xl font-light text-gray-500 cursor-pointer
+               flex items-center justify-center
+               transition-all duration-200
+               hover:bg-gray-200 hover:text-gray-700"
+        data-modal-close
+        aria-label="关闭弹窗"
+      >
+        ×
+      </button>
+    )
+  }
+
+  <!-- 内容容器 -->
+  <div class="modal-content p-6 h-full overflow-y-auto max-md:p-5">
+    <slot name="content" />
+  </div>
+</div>
+
+<style>
+  @reference "tailwindcss";
+
+  /* 显示状态 */
+  .modal.show {
+    @apply opacity-100 visible pointer-events-auto scale-100;
+  }
+
+  /* 弹窗内链接样式 */
+  .modal-content a {
+    @apply block px-4 py-3 text-gray-700 no-underline rounded-lg
+         transition-colors duration-150 text-base text-center
+         hover:bg-blue-50/80 hover:text-blue-600;
+  }
+
+  /* 自定义滚动条 */
+  .modal-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .modal-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background: rgba(209, 213, 219, 0.8);
+    border-radius: 3px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.9);
+  }
+</style>
+
+<!-- 客户端交互脚本（优化了点击外部关闭逻辑） -->
+<script>
+  const modals = document.querySelectorAll(".modal");
+
+  modals.forEach((modal) => {
+    const closeButton = modal.querySelector("[data-modal-close]");
+    const triggerButton = modal.previousElementSibling;
+
+    const showModal = () => {
+      modal.classList.add("show");
+      document.body.style.overflow = "hidden";
+      // 添加全局点击监听
+      document.addEventListener("click", handleOutsideClick);
+    };
+
+    const hideModal = () => {
+      modal.classList.remove("show");
+      document.body.style.overflow = "";
+      // 移除全局点击监听
+      document.removeEventListener("click", handleOutsideClick);
+    };
+
+    // 点击外部关闭逻辑（无遮罩层专用）
+    function handleOutsideClick(e: any) {
+      if (!modal.contains(e.target) && e.target !== triggerButton) {
+        hideModal();
+      }
+    }
+
+    // 点击触发按钮显示
+    if (triggerButton) {
+      triggerButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showModal();
+      });
+    }
+
+    // 点击关闭按钮隐藏
+    if (closeButton) {
+      closeButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        hideModal();
+      });
+    }
+
+    // 按ESC键隐藏
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("show")) {
+        hideModal();
+      }
+    });
+  });
+</script>

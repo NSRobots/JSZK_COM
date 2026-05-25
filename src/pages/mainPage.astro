@@ -1,6 +1,7 @@
 ---
 import Button from "../components/CubeBtn.astro";
-import type { ButtonItem } from "../Interface/site";
+import Modal from "../components/Modal.astro";
+import type { CubeBtn } from "../Interface/site";
 import { cubeBtns } from "../data/btnDatas";
 ---
 
@@ -69,8 +70,47 @@ import { cubeBtns } from "../data/btnDatas";
   <div
     class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4"
   >
-    {cubeBtns.map((btn: ButtonItem) => <Button item={btn} />)}
+    {cubeBtns.map((btn: CubeBtn) => <Button item={btn} />)}
   </div>
+
+  <!-- <div
+    class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4"
+  >
+    {
+      cubeBtns.map((btn: CubeBtn) => {
+        if (!btn.href || btn.href === "") {
+          return (
+            <Modal width="480px" height="320px" overlayOpacity={0.5}>
+              <Button item={btn} slot="trigger" />
+
+              <div slot="content">
+                <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">
+                  选择下载版本
+                </h3>
+                <div class="space-y-2">
+                  <a href="/download/windows">
+                    <span class="mr-2">🪟</span> Windows 64位
+                  </a>
+                  <a href="/download/macos">
+                    <span class="mr-2">🍎</span> macOS 通用版
+                  </a>
+                  <a href="/download/linux">
+                    <span class="mr-2">🐧</span> Linux 64位
+                  </a>
+                  <a href="/download/source">
+                    <span class="mr-2">📦</span> 源码包
+                  </a>
+                </div>
+              </div>
+            </Modal>
+          );
+        }
+
+        // 普通按钮
+        return <Button item={btn} />;
+      })
+    }
+  </div> -->
 </div>
 
 <script lang="ts">

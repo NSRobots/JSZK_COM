@@ -1,0 +1,45 @@
+---
+// 标题导航窗口，暂未使用
+
+// src/pages/blogs/[slug].astro
+import L2Layout from "../../layouts/L2Layout.astro";
+import Header from "../../components/L2Header.astro";
+import Footer from "../../components/Footer.astro";
+
+// 定义该动态路由的所有可能路径
+export async function getStaticPaths() {
+  // 获取所有博客文章
+  const allBlogs = Object.values(
+    import.meta.glob("/src/content/blogs/*.md", { eager: true }),
+  );
+
+  // 提取唯一标签
+  const uniqueTags = [
+    ...new Set(allBlogs.flatMap((blog: any) => blog.frontmatter.tags || [])),
+  ];
+
+  // 依据tags生成路由
+  return uniqueTags.map((tag: any) => {
+    // 只传递与该标签相关的文章
+    const filteredBlog = allBlogs.filter((blog: any) =>
+      blog.frontmatter.tags?.includes(tag),
+    );
+    return {
+      params: { tag }, // 依据tag的路由
+      props: { blog: filteredBlog }, // 只传相关tag的文章
+    };
+  });
+}
+
+// 从 getStaticPaths 接收当前文章条目
+const { tag } = Astro.params;
+const { blog } = Astro.props;
+---
+
+<L2Layout>
+  <Header slot="header" />
+  <div slot="content">
+    <h2>Posts found for tag: {tag}</h2>
+  </div>
+  <Footer slot="footer" />
+</L2Layout>

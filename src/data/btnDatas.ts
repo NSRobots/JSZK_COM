@@ -23,7 +23,11 @@ export const commonItems: Record<string, ButtonItem> = {
     isRedirect: true,
   },
   ai: { href: "https://chat.deepseek.com/", label: "AI", isRedirect: true },
-  feedback: { href: "/feedback/", label: "反馈", isRedirect: false },
+  feedback: {
+    href: "https://lcndei2tj60n.feishu.cn/share/base/form/shrcn7wJQqfpYa0uXnsb9Fu9ose",
+    label: "反馈",
+    isRedirect: true,
+  },
   sponsor: {
     href: "/contact/",
     label: "代言",
@@ -68,7 +72,7 @@ export const cubeBtns: CubeBtn[] = [
     ...commonItems.feedback,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
-    isRedirect: false,
+    isRedirect: true,
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">Q&A</p>`,
   },
   {

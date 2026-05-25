@@ -1,0 +1,64 @@
+---
+import "../styles/global.css";
+import Header from "../components/L2Header.astro";
+import Footer from "../components/Footer.astro";
+
+const { frontmatter } = Astro.props;
+
+// 是否是markdown页面
+const isMarkDownPage = frontmatter && Object.keys(frontmatter).length > 0;
+// 是否需要侧边栏
+const hasSidebar = Astro.slots.has("sidebar");
+---
+
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>键鼠智控，轻松一键，告别重复</title>
+    <link rel="icon" type="image/x-icon" href="/ZK.ico" />
+  </head>
+  <body class="font-sans text-gray-900 bg-white">
+    <Header />
+
+    <!-- main content -->
+    <div class="min-h-screen bg-white flex flex-col md:flex-row">
+      <!-- 左侧侧边栏 -->
+      {
+        hasSidebar && (
+          <aside class="md:w-64 bg-gray-50 border-b md:border-r border-gray-200 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:overflow-y-auto">
+            <div class="p-4">
+              <slot name="sidebar" />
+            </div>
+          </aside>
+        )
+      }
+
+      <!-- Frontmatter 区域 -->
+      <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <header class="mb-10 text-center">
+          <h1 class="text-3xl sm:text-4xl font-bold text-[var(--primary-dark)]">
+            {frontmatter.title}
+          </h1>
+
+          <p class="mt-2 text-sm text-[var(--text-secondary)]">
+            文章作者：{frontmatter.author}
+          </p>
+
+          <p class="mt-1 text-base text-gray-600">
+            {frontmatter.description}
+          </p>
+
+          <hr class="mt-6 border-t border-gray-200" />
+        </header>
+
+        <!-- Markdown 正文 -->
+        <article class="markdown-body">
+          <slot />
+        </article>
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>
