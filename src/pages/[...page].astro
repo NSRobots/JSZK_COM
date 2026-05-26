@@ -2,15 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import CubeButton from "../components/Buttons/CubeBtn.astro";
-import CommonButton from "../components/Buttons/CubeBtn.astro";
 import DownloadModal from "../components/Modals/DownloadModal.astro";
 import type { CubeBtn } from "../Interface/site";
-import { cubeBtns, dlChannels } from "../data/btnDatas";
+import { cubeBtns } from "../data/btnDatas";
 
 export async function getStaticPaths() {
   return [
     { params: { page: undefined } },
-    { params: { page: "download" } },
+    // { params: { page: "download" } },
     { params: { page: "contact" } },
   ];
 }
