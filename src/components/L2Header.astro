@@ -1,6 +1,5 @@
 ---
 import { commonItems, dlChannels } from "../data/btnDatas";
-import Modal from "./Modals/Modal.astro";
 import DownloadModal from "./Modals/DownloadModal.astro";
 
 // L2Header.astro - 顶部导航栏（桌面端 + 移动端侧边栏）
@@ -149,27 +148,12 @@ const modalItems = items.filter((item) => item.isModal);
   modalItems.map((item) => {
     const mid = getModalId(item.label);
     return (
-      <Modal id={mid}>
-        <DownloadModal />
-      </Modal>
+      <DownloadModal modalId={mid} />
     );
   })
 }
 
 <script>
-  // ===== Modal 触发器绑定 =====
-  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const modalId = trigger.getAttribute("data-modal-trigger");
-      if (modalId) {
-        const dialog = document.getElementById(modalId);
-        if (dialog instanceof HTMLDialogElement) {
-          dialog.showModal();
-        }
-      }
-    });
-  });
-
   // ===== 移动端菜单逻辑 =====
   const mobileMenuButton = document.getElementById("mobileMenuButton");
   const mobileSidebar = document.getElementById("mobileSidebar");
@@ -201,6 +185,19 @@ const modalItems = items.filter((item) => item.isModal);
   if (mobileMenuOverlay) {
     mobileMenuOverlay.addEventListener("click", closeMobileMenu);
   }
+
+  // ===== Modal 触发器绑定 =====
+  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const modalId = trigger.getAttribute("data-modal-trigger");
+      if (modalId) {
+        const dialog = document.getElementById(modalId);
+        if (dialog instanceof HTMLDialogElement) {
+          dialog.showModal();
+        }
+      }
+    });
+  });
 
   // ESC键关闭菜单（但不影响 Modal 自带的 ESC 关闭）
   document.addEventListener("keydown", (event) => {

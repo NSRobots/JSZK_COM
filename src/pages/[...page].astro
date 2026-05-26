@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import Footer from "../components/Footer.astro";
 import CubeButton from "../components/Buttons/CubeBtn.astro";
-import DownloadModal from "../components/Modals/DownloadModal.astro";
 import type { CubeBtn } from "../Interface/site";
 import { cubeBtns } from "../data/btnDatas";
 
@@ -160,9 +159,7 @@ const data = pageDataMap[pageKey];
       data.buttons && (
         <div class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4">
           {data.buttons.map((btn: CubeBtn) => (
-            <CubeButton item={btn}>
-              <DownloadModal slot="Modal" />
-            </CubeButton>
+            <CubeButton item={btn} />
           ))}
         </div>
       )

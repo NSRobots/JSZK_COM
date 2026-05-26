@@ -13,7 +13,7 @@ export interface Props {
 const {
   id,
   width = "460px",
-  height = "380px",
+  height = "auto",
   showCloseButton = true,
 } = Astro.props;
 ---
@@ -21,7 +21,7 @@ const {
 <dialog
   id={id}
   data-modal
-  style={`width: ${width}; height: ${height}; max-width: 90vw; max-height: 85vh;`}
+  style={`width: ${width}; ${height !== "auto" ? `height: ${height};` : ""} max-width: 90vw; max-height: 85vh;`}
   class="modal-dialog"
 >
   <div class="modal-inner">
@@ -108,8 +108,8 @@ const {
   /* ===== 内容容器 ===== */
   .modal-inner {
     @apply relative;
-    height: auto;
-    max-height: 85vh;
+    max-height: 100%;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
       display: none;
@@ -121,7 +121,6 @@ const {
   .modal-body {
     @apply p-6 overflow-y-auto;
     overflow-y: hidden;
-    max-height: min(calc(85vh - 3rem), 350px);
   }
 
   /* 移动端适配 */
@@ -134,7 +133,6 @@ const {
 
     .modal-body {
       @apply p-5;
-      max-height: min(calc(85vh - 3rem), 350px);
     }
   }
 </style>

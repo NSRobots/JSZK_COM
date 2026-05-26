@@ -102,7 +102,7 @@ export const dlChannels: CommonBtn[] = [
   {
     label: "微软商店",
     isModal: false,
-    href: "https://apps.microsoft.com/detail/9p7ll3d9lf7b?hl=zh-CN&gl=CN",
+    href: "https://apps.microsoft.com/detail/9p7ll3d9lf7b",
     iconSvg: `<svg width="200" height="200" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
   <rect x="5" y="5" width="40" height="40" fill="var(--white)"/> 
   <rect x="55" y="5" width="40" height="40" fill="var(--white)"/> 
@@ -115,10 +115,21 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "站外线路",
+    label: "站外线路1",
+    isModal: false,
+    href: "https://gitee.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP1</p>`,
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    isRedirect: true,
+    height: 20,
+    width: 80,
+  },
+  {
+    label: "站外线路2",
     isModal: false,
     href: "https://gitcode.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
-    iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP</p>`,
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP2</p>`,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
     isRedirect: true,

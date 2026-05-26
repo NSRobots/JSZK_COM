@@ -7,7 +7,8 @@ const { item } = Astro.props as { item: CommonBtn };
 
 <div
   style={`--btn-bg: ${item.bgColor}; height: ${item.height}%; width: ${item.width}%; --hover-bg: var(--primary-light-l2)`}
-  class=`max-md:w-[110px] max-md:h-[110px]
+  class=`flex-shrink-0
+  max-md:w-[110px] max-md:h-[110px]
          p-[14px_20px] rounded-xl text-base font-medium
          transition-all duration-[250ms] cursor-pointer
          border border-transparent border-[1.5px]
@@ -28,6 +29,6 @@ const { item } = Astro.props as { item: CommonBtn };
       class="flex items-center justify-center w-8 h-8
                      [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
     />
-    <p>{item.label}</p>
+    <p class="text-xl">{item.label}</p>
   </a>
 </div>
