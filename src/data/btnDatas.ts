@@ -1,37 +1,47 @@
-import type { ButtonItem } from "../Interface/site";
-import type { CubeBtn } from "../Interface/site";
+import type { ButtonItem, CubeBtn, CommonBtn } from "../Interface/site";
 
 export const commonItems: Record<string, ButtonItem> = {
   index: {
     href: "/",
     label: "首页",
     isRedirect: false,
+    isModal: false,
   },
   download: {
-    href: "/download",
+    href: "",
     label: "下载",
     isRedirect: false,
+    isModal: true,
   },
   video: {
     href: "https://lcndei2tj60n.feishu.cn/docx/TGCJdUHeKozpbexOdg3c4tGQn8d",
     label: "教程",
     isRedirect: true,
+    isModal: false,
   },
   manual: {
     href: "https://lcndei2tj60n.feishu.cn/docx/TGCJdUHeKozpbexOdg3c4tGQn8d",
     label: "手册",
     isRedirect: true,
+    isModal: false,
   },
-  ai: { href: "https://chat.deepseek.com/", label: "AI", isRedirect: true },
+  ai: {
+    href: "https://chat.deepseek.com/",
+    label: "AI",
+    isRedirect: true,
+    isModal: false,
+  },
   feedback: {
     href: "https://lcndei2tj60n.feishu.cn/share/base/form/shrcn7wJQqfpYa0uXnsb9Fu9ose",
     label: "反馈",
     isRedirect: true,
+    isModal: false,
   },
   sponsor: {
     href: "/contact/",
     label: "代言",
     isRedirect: false,
+    isModal: false,
   },
 };
 
@@ -78,6 +88,7 @@ export const cubeBtns: CubeBtn[] = [
   },
   {
     href: "./L2Pages/L2Index/",
+    isModal: false,
     label: "更多",
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
@@ -87,17 +98,10 @@ export const cubeBtns: CubeBtn[] = [
 ];
 
 // 下载渠道
-export const dlChannels: CubeBtn[] = [
-  {
-    label: "线路一",
-    href: "https://gitcode.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
-    iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP</p>`,
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    isRedirect: true,
-  },
+export const dlChannels: CommonBtn[] = [
   {
     label: "微软商店",
+    isModal: false,
     href: "https://apps.microsoft.com/detail/9p7ll3d9lf7b?hl=zh-CN&gl=CN",
     iconSvg: `<svg width="200" height="200" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
   <rect x="5" y="5" width="40" height="40" fill="var(--white)"/> 
@@ -107,13 +111,29 @@ export const dlChannels: CubeBtn[] = [
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
     isRedirect: true,
+    height: 20,
+    width: 80,
+  },
+  {
+    label: "站外线路",
+    isModal: false,
+    href: "https://gitcode.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP</p>`,
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    isRedirect: true,
+    height: 20,
+    width: 80,
   },
   {
     label: "备用路线",
+    isModal: false,
     href: "https://lcndei2tj60n.feishu.cn/docx/CoBUdVqAkoSOE4xzGxocgG8mnkd",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">DOC</p>`,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
     isRedirect: true,
+    height: 20,
+    width: 80,
   },
 ];

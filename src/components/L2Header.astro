@@ -1,6 +1,18 @@
 ---
-import { commonItems } from "../data/btnDatas";
-// L2Header.astro
+import { commonItems, dlChannels } from "../data/btnDatas";
+import Modal from "./Modals/Modal.astro";
+import DownloadModal from "./Modals/DownloadModal.astro";
+
+// L2Header.astro - 顶部导航栏（桌面端 + 移动端侧边栏）
+// - isModal=false：渲染为 <a> 导航链接
+// - isModal=true ：渲染为 <button>，点击打开 Modal，内容通过命名 slot 传入
+
+function getModalId(label: string): string {
+  return `modal-${label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`;
+}
+
+const items = Object.values(commonItems);
+const modalItems = items.filter((item) => item.isModal);
 ---
 
 <div
@@ -28,15 +40,26 @@ import { commonItems } from "../data/btnDatas";
   <!-- 桌面端顶部导航 -->
   <nav class="ml-auto hidden md:flex items-center space-x-6">
     {
-      Object.values(commonItems).map((item) => (
-        <a
-          href={item.href}
-          target={item.isRedirect ? "_blank" : "_self"}
-          class="hover:text-gray-200 hover:underline underline-offset-4 decoration-2 transition-all duration-200 px-3"
-        >
-          {item.label}
-        </a>
-      ))
+      items.map((item) => {
+        const mid = getModalId(item.label);
+        return item.isModal ? (
+          <button
+            aria-label={item.label}
+            class="hover:text-gray-200 hover:underline underline-offset-4 decoration-2 transition-all duration-200 px-3"
+            data-modal-trigger={mid}
+          >
+            {item.label}
+          </button>
+        ) : (
+          <a
+            href={item.href}
+            target={item.isRedirect ? "_blank" : "_self"}
+            class="hover:text-gray-200 hover:underline underline-offset-4 decoration-2 transition-all duration-200 px-3"
+          >
+            {item.label}
+          </a>
+        );
+      })
     }
   </nav>
 
@@ -83,16 +106,27 @@ import { commonItems } from "../data/btnDatas";
     <div class="p-4">
       <nav class="flex flex-col space-y-4">
         {
-          Object.values(commonItems).map((item) => (
-            <a
-              href={item.href}
-              target={item.isRedirect ? "_blank" : "_self"}
-              class="py-3 px-4 hover:bg-white/10 hover:underline rounded transition-colors duration-200"
-              onclick="closeMobileMenu()"
-            >
-              {item.label}
-            </a>
-          ))
+          items.map((item) => {
+            const mid = getModalId(item.label);
+            return item.isModal ? (
+              <button
+                class="py-3 px-4 hover:bg-white/10 hover:underline rounded transition-colors duration-200 w-full text-left text-white"
+                data-modal-trigger={mid}
+                onclick="closeMobileMenu()"
+              >
+                {item.label}
+              </button>
+            ) : (
+              <a
+                href={item.href}
+                target={item.isRedirect ? "_blank" : "_self"}
+                class="py-3 px-4 hover:bg-white/10 hover:underline rounded transition-colors duration-200"
+                onclick="closeMobileMenu()"
+              >
+                {item.label}
+              </a>
+            );
+          })
         }
       </nav>
     </div>
@@ -110,8 +144,33 @@ import { commonItems } from "../data/btnDatas";
   </button>
 </div>
 
-<script lang="ts">
-  // 获取DOM元素
+<!-- Modal 弹窗（仅为 isModal 的条目渲染） -->
+{
+  modalItems.map((item) => {
+    const mid = getModalId(item.label);
+    return (
+      <Modal id={mid}>
+        <DownloadModal />
+      </Modal>
+    );
+  })
+}
+
+<script>
+  // ===== Modal 触发器绑定 =====
+  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const modalId = trigger.getAttribute("data-modal-trigger");
+      if (modalId) {
+        const dialog = document.getElementById(modalId);
+        if (dialog instanceof HTMLDialogElement) {
+          dialog.showModal();
+        }
+      }
+    });
+  });
+
+  // ===== 移动端菜单逻辑 =====
   const mobileMenuButton = document.getElementById("mobileMenuButton");
   const mobileSidebar = document.getElementById("mobileSidebar");
   const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
@@ -119,21 +178,18 @@ import { commonItems } from "../data/btnDatas";
 
   // 打开移动端菜单
   function openMobileMenu() {
-    mobileSidebar.style.left = "0";
-    mobileMenuOverlay.style.display = "block";
-    // 防止背景滚动
+    if (mobileSidebar) mobileSidebar.style.left = "0";
+    if (mobileMenuOverlay) mobileMenuOverlay.style.display = "block";
     document.body.style.overflow = "hidden";
   }
 
   // 关闭移动端菜单
   function closeMobileMenu() {
-    mobileSidebar.style.left = "-100%";
-    mobileMenuOverlay.style.display = "none";
-    // 恢复滚动
+    if (mobileSidebar) mobileSidebar.style.left = "-100%";
+    if (mobileMenuOverlay) mobileMenuOverlay.style.display = "none";
     document.body.style.overflow = "";
   }
 
-  // 事件监听
   if (mobileMenuButton) {
     mobileMenuButton.addEventListener("click", openMobileMenu);
   }
@@ -146,45 +202,28 @@ import { commonItems } from "../data/btnDatas";
     mobileMenuOverlay.addEventListener("click", closeMobileMenu);
   }
 
-  // ESC键关闭菜单
+  // ESC键关闭菜单（但不影响 Modal 自带的 ESC 关闭）
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      closeMobileMenu();
-    }
-  });
-
-  // 点击导航链接时关闭菜单（在链接上已添加onclick）
-  // 但还需要添加事件委托以防动态内容
-  document.addEventListener("click", (event) => {
-    if (
-      event.target &&
-      event.target.matches(
-        "#mobileSidebar a[href]:not(#closeMobileMenu, #mobileMenuButton)",
-      )
-    ) {
       closeMobileMenu();
     }
   });
 </script>
 
 <style>
-  /* 添加过渡动画 */
+  @reference "tailwindcss";
+
   #mobileSidebar {
-    /* ...其他属性... */
     z-index: 40;
   }
 
-  /* 防止在移动端菜单打开时滚动背景 */
   body.menu-open {
-    overflow: hidden;
+    @apply overflow-hidden;
   }
 
-  /* 遮罩层动画 */
   #mobileMenuOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色 */
-    display: none; /* 初始隐藏 */
+    @apply fixed inset-0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
   }
 </style>

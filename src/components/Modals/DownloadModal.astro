@@ -1,0 +1,26 @@
+---
+import CommonBtn from "../Buttons/CommonBtn.astro";
+import { dlChannels } from "../../data/btnDatas";
+
+const modalId = "download-modal";
+---
+
+<!-- <Modal id={modalId} width="460px" height="auto" showCloseButton={true}> -->
+<div class="flex flex-col items-center justify-around gap-4">
+  <h3 class="text-lg font-semibold text-gray-800 m-0">选择下载渠道</h3>
+  <div class="flex flex-wrap justify-center gap-4 mt-4">
+    {dlChannels.map((channel) => <CommonBtn item={channel} />)}
+  </div>
+  <p>（推荐操作系统：Window10,11）</p>
+</div>
+<!-- </Modal> -->
+
+<style>
+  @reference "tailwindcss";
+
+  @media (max-width: 768px) {
+    .download-modal-grid {
+      @apply flex-col items-center;
+    }
+  }
+</style>

@@ -1,0 +1,231 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+import CubeButton from "../components/Buttons/CubeBtn.astro";
+import CommonButton from "../components/Buttons/CubeBtn.astro";
+import DownloadModal from "../components/Modals/DownloadModal.astro";
+import type { CubeBtn } from "../Interface/site";
+import { cubeBtns, dlChannels } from "../data/btnDatas";
+
+export async function getStaticPaths() {
+  return [
+    { params: { page: undefined } },
+    { params: { page: "download" } },
+    { params: { page: "contact" } },
+  ];
+}
+
+const { page } = Astro.params;
+const pageKey = page ?? "index";
+
+interface PageData {
+  title: string;
+  buttons: CubeBtn[] | null;
+  typingLines: string[];
+  showBack: boolean;
+  logoLinked: boolean;
+  typingFontClass: string;
+}
+
+const pageDataMap: Record<string, PageData> = {
+  index: {
+    title: "键鼠智控",
+    buttons: cubeBtns,
+    typingLines: ["轻松一键,", "告别所有重复操作"],
+    showBack: false,
+    logoLinked: false,
+    typingFontClass: "text-3xl",
+  },
+  // download: {
+  //   title: "键鼠智控",
+  //   buttons: dlChannels,
+  //   typingLines: ["请选择下载方式", '("微软商店"仅支持Windows10+系统)'],
+  //   showBack: true,
+  //   logoLinked: false,
+  //   typingFontClass: "text-[18px] md:text-[28px]",
+  // },
+  contact: {
+    title: "商业合作",
+    buttons: null,
+    typingLines: [
+      "如果您认为这是一款不错的软件,",
+      "那么我们携手让键鼠智控走向更大的舞台🥰",
+      "创赵智码官网：http://czzm.team",
+      "软件交流互助QQ群：516765146",
+      "官方客服QQ：92649808",
+      "电子邮箱：czhaozm@qq.com",
+      "微信公众号/抖音/哔哩哔哩：创赵智码",
+    ],
+    showBack: true,
+    logoLinked: true,
+    typingFontClass: "text-[18px] md:text-[28px]",
+  },
+};
+
+const data = pageDataMap[pageKey];
+---
+
+<style>
+  /* 弧形分隔复用 */
+  .banner-body {
+    position: relative;
+    background-color: var(--primary);
+  }
+
+  .banner-body::after {
+    content: "";
+    position: absolute;
+    bottom: -59px;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: var(--primary);
+    clip-path: ellipse(130% 100% at 60% 0%);
+    border-radius: 0 0 50% 50% / 0 0 60% 60%;
+  }
+
+  @media (max-width: 768px) {
+    .banner-body::after {
+      bottom: -35px;
+    }
+  }
+</style>
+
+<Layout>
+  <div
+    slot="content"
+    style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
+    class="banner-body relative text-center pb-10"
+  >
+    <!-- 返回首页 -->
+    {
+      data.showBack && (
+        <a
+          href="/"
+          class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 hover:text-[var(--white)] transition-colors duration-300"
+          aria-label="返回首页"
+        >
+          &lt;--
+        </a>
+      )
+    }
+
+    <!-- 语言标签 -->
+    <p
+      class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
+    >
+      JSZK
+    </p>
+
+    <!-- logo & title -->
+    <div
+      class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
+    >
+      {
+        data.logoLinked ? (
+          <a href="/" class="inline-flex items-center justify-center gap-2">
+            <img
+              src="/ZK.ico"
+              alt="键鼠智控"
+              class="w-[56px] h-[56px] object-contain"
+            />
+            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
+              {data.title}
+            </h1>
+          </a>
+        ) : (
+          <>
+            <img
+              src="/ZK.ico"
+              alt="键鼠智控"
+              class="w-[56px] h-[56px] object-contain"
+            />
+            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
+              {data.title}
+            </h1>
+          </>
+        )
+      }
+    </div>
+
+    <!-- typing area -->
+    <div
+      id="typing-container"
+      class={`animate-fade-in-up min-h-[120px] w-full text-[var(--white)] mt-10 mb-10 leading-[1.8] ${data.typingFontClass}`}
+      data-lines={JSON.stringify(data.typingLines)}
+    >
+    </div>
+
+    <!-- button box -->
+    {
+      data.buttons && (
+        <div class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4">
+          {data.buttons.map((btn: CubeBtn) => (
+            <CubeButton item={btn}>
+              <DownloadModal slot="Modal" />
+            </CubeButton>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <Footer slot="footer" />
+</Layout>
+
+<script>
+  const speed = 50; // 打字速度（毫秒/字）
+  const firstDelayTime = 320;
+  const betweenLinesDelay = 400;
+
+  async function delay(ms: number) {
+    return await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(
+    element: HTMLElement,
+    text: string,
+    lineIndex: number,
+  ) {
+    for (let i = 0; i < text.length; i++) {
+      // 首页第一行第三个字后延迟
+      if (lineIndex === 0 && i === 2) {
+        await delay(firstDelayTime);
+      }
+      element.textContent += text.charAt(i);
+      await delay(speed);
+    }
+  }
+
+  async function startTyping() {
+    const container = document.getElementById("typing-container");
+    if (!container) return;
+
+    const lines: string[] = JSON.parse(container.dataset.lines || "[]");
+
+    // 清空容器并动态创建 p 标签
+    container.innerHTML = "";
+    const typedElements: HTMLElement[] = [];
+
+    lines.forEach((lineText) => {
+      const p = document.createElement("p");
+      p.className = "typing-line";
+      container.appendChild(p);
+      typedElements.push(p);
+    });
+
+    // 逐行动画
+    for (let i = 0; i < typedElements.length; i++) {
+      const el = typedElements[i];
+      el.classList.add("typing-cursor");
+      await typeText(el, lines[i], i);
+      el.classList.remove("typing-cursor");
+
+      if (i < typedElements.length - 1) {
+        await delay(betweenLinesDelay);
+      }
+    }
+  }
+
+  // 页面加载完成后启动动画
+  document.addEventListener("DOMContentLoaded", startTyping);
+</script>
