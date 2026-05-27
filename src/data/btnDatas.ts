@@ -112,7 +112,7 @@ export const cubeBtns: CubeBtn[] = [
 // 下载渠道
 export const dlChannels: CommonBtn[] = [
   {
-    label: "微软商店",
+    label: "微软应用商店",
     isModal: false,
     href: "https://apps.microsoft.com/detail/9p7ll3d9lf7b",
     iconSvg: `<svg width="200" height="200" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> 
@@ -127,7 +127,7 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "站外线路一",
+    label: "下载路线1",
     isModal: false,
     href: "https://gitee.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP1</p>`,
@@ -138,7 +138,7 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "站外线路二",
+    label: "下载路线2",
     isModal: false,
     href: "https://gitcode.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP2</p>`,
@@ -149,7 +149,7 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "备用路线",
+    label: "备用渠道",
     isModal: false,
     href: "https://lcndei2tj60n.feishu.cn/docx/CoBUdVqAkoSOE4xzGxocgG8mnkd",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">DOC</p>`,

@@ -7,8 +7,7 @@ const { item } = Astro.props as { item: CommonBtn };
 
 <div
   style={`--btn-bg: ${item.bgColor}; height: ${item.height}%; width: ${item.width}%; --hover-bg: var(--primary-light-l2)`}
-  class=`flex-shrink-0
-  max-md:w-[110px] max-md:h-[110px]
+  class=`flex-shrink-0 max-md:w-full max-md:h-auto
          p-[14px_20px] rounded-xl text-base font-medium
          transition-all duration-[250ms] cursor-pointer
          border border-transparent border-[1.5px]
@@ -21,14 +20,18 @@ const { item } = Astro.props as { item: CommonBtn };
     aria-label={item.label}
     style={`color: ${item.itemColor}; `}
     target={item.isRedirect ? "_blank" : "_self"}
-    class="flex flex-row items-center justify-around w-full h-full
-                   no-underline gap-2.5 box-border rounded-xl"
+    class="flex flex-column justify-around w-full h-full
+                   no-underline gap-2.5 box-border rounded-xl leading-none"
   >
     <span
       set:html={item.iconSvg}
-      class="flex items-center justify-center w-8 h-8
+      class="w-8 h-8 max-w-full max-h-full
                      [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
     />
-    <p class="text-xl flex items-center justify-center">{item.label}</p>
+    <p
+      class="text-xl max-md:text-lg flex items-center justify-center flex-1 whitespace-nowrap"
+    >
+      {item.label}
+    </p>
   </a>
 </div>
