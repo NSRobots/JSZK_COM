@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import CubeButton from "../components/Buttons/CubeBtn.astro";
 import type { CubeBtn } from "../Interface/site";
 import { cubeBtns } from "../data/btnDatas";
+import DownloadModal from "../components/Modals/DownloadModal.astro";
 
 export async function getStaticPaths() {
   return [
@@ -61,6 +62,10 @@ const pageDataMap: Record<string, PageData> = {
 };
 
 const data = pageDataMap[pageKey];
+
+function getModalId(label: string): string {
+  return `modal-${label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`;
+}
 ---
 
 <style>
@@ -164,6 +169,14 @@ const data = pageDataMap[pageKey];
         </div>
       )
     }
+    {
+      data.buttons
+        ?.filter((btn) => btn.isModal)
+        .map((btn: CubeBtn) => {
+          const modalId = getModalId(btn.label);
+          return <DownloadModal modalId={modalId} />;
+        })
+    }
   </div>
   <Footer slot="footer" />
 </Layout>
@@ -224,4 +237,17 @@ const data = pageDataMap[pageKey];
 
   // 页面加载完成后启动动画
   document.addEventListener("DOMContentLoaded", startTyping);
+
+  // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
+  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const modalId = (trigger as HTMLElement).dataset.modalTrigger;
+      if (modalId) {
+        const dialog = document.getElementById(
+          modalId,
+        ) as HTMLDialogElement | null;
+        dialog?.showModal();
+      }
+    });
+  });
 </script>

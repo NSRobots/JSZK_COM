@@ -59,19 +59,19 @@ const modalId = `modal-${item.label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`
   }
 </div>
 
-{item.isModal && <DownloadModal modalId={modalId} />}
+<!-- {item.isModal && <DownloadModal modalId={modalId} />} -->
 
 <script>
-  // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
-  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const modalId = (trigger as HTMLElement).dataset.modalTrigger;
-      if (modalId) {
-        const dialog = document.getElementById(
-          modalId,
-        ) as HTMLDialogElement | null;
-        dialog?.showModal();
-      }
-    });
-  });
+  // // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
+  // document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
+  //   trigger.addEventListener("click", () => {
+  //     const modalId = (trigger as HTMLElement).dataset.modalTrigger;
+  //     if (modalId) {
+  //       const dialog = document.getElementById(
+  //         modalId,
+  //       ) as HTMLDialogElement | null;
+  //       dialog?.showModal();
+  //     }
+  //   });
+  // });
 </script>

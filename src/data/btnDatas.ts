@@ -43,6 +43,12 @@ export const commonItems: Record<string, ButtonItem> = {
     isRedirect: false,
     isModal: false,
   },
+  other: {
+    href: "http://czzm.team/",
+    label: "其他产品",
+    isRedirect: false,
+    isModal: false,
+  },
 };
 
 export const cubeBtns: CubeBtn[] = [
@@ -95,6 +101,12 @@ export const cubeBtns: CubeBtn[] = [
     isRedirect: false,
     iconSvg: `<p style="font-size: 25px; font-weight: bold;"><...></p>`,
   },
+  {
+    ...commonItems.other,
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<p style="font-size: 25px; font-weight: bold;">Other</p>`,
+  },
 ];
 
 // 下载渠道
@@ -115,7 +127,7 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "站外线路1",
+    label: "站外线路一",
     isModal: false,
     href: "https://gitee.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP1</p>`,
@@ -126,7 +138,7 @@ export const dlChannels: CommonBtn[] = [
     width: 80,
   },
   {
-    label: "站外线路2",
+    label: "站外线路二",
     isModal: false,
     href: "https://gitcode.com/czhaozm/czzm/releases/download/jszk/JSZK.zip",
     iconSvg: `<p style="font-size: 25px; font-weight: bold;">.ZIP2</p>`,
