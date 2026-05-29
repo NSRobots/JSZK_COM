@@ -98,7 +98,7 @@ function getModalId(label: string): string {
   <div
     slot="content"
     style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
-    class="banner-body relative text-center pb-10"
+    class="banner-body pb-10"
   >
     <!-- 返回首页 -->
     {
@@ -154,7 +154,7 @@ function getModalId(label: string): string {
     <!-- typing area -->
     <div
       id="typing-container"
-      class={`animate-fade-in-up min-h-[120px] w-full text-[var(--white)] mt-10 mb-10 leading-[1.8] ${data.typingFontClass}`}
+      class={`animate-fade-in-up text-center min-h-[120px] w-full text-[var(--white)] mt-10 mb-10 leading-[1.8] ${data.typingFontClass}`}
       data-lines={JSON.stringify(data.typingLines)}
     >
     </div>
@@ -178,6 +178,7 @@ function getModalId(label: string): string {
         })
     }
   </div>
+
   <Footer slot="footer" />
 </Layout>
 
