@@ -10,22 +10,11 @@ export interface Props {
 const { modalId = "download-modal" } = Astro.props;
 ---
 
-<Modal id={modalId} width="460px" height="auto" showCloseButton={true}>
-  <div class="flex flex-col items-center justify-around gap-4">
-    <h3 class="text-lg font-semibold text-gray-800 m-0">请选择下载渠道</h3>
-    <div class="flex flex-wrap justify-center gap-4 mt-4">
+<Modal id={modalId} showCloseButton={true}>
+  <div class="flex flex-col items-center gap-4">
+    <h3 class="text-2xl font-semibold text-gray-800 m-0">请选择下载渠道</h3>
+    <div class="flex flex-wrap justify-center gap-4 mt-4 mb-4">
       {dlChannels.map((channel) => <CommonBtn item={channel} />)}
     </div>
-    <p>微软应用商店仅支持<br /> Windows10 操作系统及以上</p>
   </div>
 </Modal>
-
-<style>
-  @reference "tailwindcss";
-
-  @media (max-width: 768px) {
-    .download-modal-grid {
-      @apply flex-col items-center;
-    }
-  }
-</style>

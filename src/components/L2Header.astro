@@ -85,20 +85,9 @@ const modalItems = items.filter((item) => item.isModal);
         </div>
         <button
           id="closeMobileMenu"
-          class="p-2 hover:bg-white/10 rounded transition-colors"
-        >
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
+          class="hover:bg-white/10 rounded transition-colors w-6 h-6 border-none rounded-full
+           leading-none cursor-pointer text-2xl"
+          >&times;
         </button>
       </div>
     </div>
@@ -147,9 +136,7 @@ const modalItems = items.filter((item) => item.isModal);
 {
   modalItems.map((item) => {
     const mid = getModalId(item.label);
-    return (
-      <DownloadModal modalId={mid} />
-    );
+    return <DownloadModal modalId={mid} />;
   })
 }
 

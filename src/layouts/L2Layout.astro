@@ -2,10 +2,6 @@
 import "../styles/global.css";
 // L2Layout.astro
 
-const { frontmatter } = Astro.props;
-
-// 是否是markdown页面
-const isMarkDownPage = frontmatter && Object.keys(frontmatter).length > 0;
 // 是否需要侧边栏
 const hasSidebar = Astro.slots.has("sidebar");
 ---

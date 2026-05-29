@@ -6,32 +6,48 @@ const { item } = Astro.props as { item: CommonBtn };
 ---
 
 <div
-  style={`--btn-bg: ${item.bgColor}; height: ${item.height}%; width: ${item.width}%; --hover-bg: var(--primary-light-l2)`}
-  class=`flex-shrink-0 max-md:w-full max-md:h-auto
+  style={{
+    "--btn-bg": item.bgColor,
+    "--hover-bg": item.hoverColor ?? "var(--primary-light-l2)",
+    height: `${item.height ?? 20}%`,
+    width: `${item.width ?? 80}%`,
+  }}
+  class="dynamic-hover-btn flex-shrink-0 max-md:w-full max-md:h-auto
          p-[14px_20px] rounded-xl text-base font-medium
          transition-all duration-[250ms] cursor-pointer
          border border-transparent border-[1.5px]
          shadow-none bg-[var(--btn-bg)]
-         hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)]
-         hover:bg-[var(--primary-light-l2)]`
+         hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)]"
 >
   <a
     href={item.href}
     aria-label={item.label}
     style={`color: ${item.itemColor}; `}
     target={item.isRedirect ? "_blank" : "_self"}
-    class="flex flex-column justify-around w-full h-full
+    class="flex flex-row items-center w-full h-full
                    no-underline gap-2.5 box-border rounded-xl leading-none"
   >
     <span
       set:html={item.iconSvg}
-      class="w-8 h-8 max-w-full max-h-full
-                     [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
+      class="w-10 h-10 flex-shrink-0 flex items-center justify-center [&_svg]:max-w-full [&_svg]:max-h-full"
     />
-    <p
-      class="text-xl max-md:text-lg flex items-center justify-center flex-1 whitespace-nowrap"
-    >
-      {item.label}
-    </p>
+    <div class="flex flex-col items-start justify-start flex-1 min-w-0">
+      <p class="text-xl max-md:text-lg text-left">{item.label}</p>
+      {
+        item.details && item.details !== "" && (
+          <p class="text-sm text-left">{item.details}</p>
+        )
+      }
+    </div>
   </a>
 </div>
+
+<style>
+  .dynamic-hover-btn {
+    background-color: var(--btn-bg);
+    transition: background-color 250ms;
+  }
+  .dynamic-hover-btn:hover {
+    background-color: var(--hover-bg);
+  }
+</style>
