@@ -7,7 +7,8 @@
         --primary: #43b2f1;
         --primary-light: #3db7fd;
         --primary-light-l2: #51bcfa;
-        --primary-dark: #00a0e9;
+        /* --primary-dark:#165DFF; */
+        --primary-dark: #387ec9;
         --white: #ffffff;
         --second-white:#f2f2f2;
         --second-white-dark:#e5e5e5;
@@ -82,6 +83,11 @@
             top: 2%;
             right: 0.5%;
         }
+    }
+
+    .typing-line {
+        white-space: pre-wrap; /* 保留所有空格和换行 */
+        min-height: 1.8em; /* 确保纯空格行有正常高度，不会被折叠 */
     }
 }
 

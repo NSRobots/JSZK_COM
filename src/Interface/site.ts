@@ -6,17 +6,42 @@ export interface ButtonItem {
 }
 
 export interface CubeBtn extends ButtonItem {
-  iconSvg: string;
   itemColor: string; // 图标颜色
   bgColor: string; // 背景颜色
+  iconSvg?: string;
 }
 
 export interface CommonBtn extends ButtonItem {
   height?: number;
   width?: number;
-  iconSvg?: string;
   itemColor?: string;
   bgColor?: string;
   hoverColor?: string;
+  iconSvg?: string;
   details?: string;
+}
+
+export interface TypingSection {
+  lines: string[];
+  typingClass: string;
+  typingSpeed?: number;
+}
+
+export interface PageData {
+  title: string;
+  height?:
+    | string
+    | number
+    | {
+        base: string | number;
+        md?: string | number;
+        lg?: string | number;
+      };
+  buttons: CubeBtn[] | null;
+  showBack?: boolean;
+  showJSZK?: boolean;
+  showTitleLogo?: boolean;
+  logoLinked?: boolean;
+  typingSections: TypingSection[];
+  boxStyle?: string;
 }

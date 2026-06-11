@@ -34,7 +34,7 @@ import { postImages } from "../../data/postDatas";
       id="prevBtn"
       class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-40 transition-colors"
     >
-      ←
+      <img src="/logos/pre.png" class="w-[16px] h-[16px] object-contain" />
     </button>
     <span
       id="pageIndicator"
@@ -46,17 +46,30 @@ import { postImages } from "../../data/postDatas";
       id="nextBtn"
       class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-40 transition-colors"
     >
-      →
+      <img src="/logos/next.png" class="w-[16px] h-[16px] object-contain" />
     </button>
+  </div>
+
+  <!-- 团队信息 -->
+  <div class="pb-4 pt-16 flex flex-col">
+    <p class="pb-8 text-3xl md:text-2xl font-bold text-gray-900">
+      创赵智码团队成员
+    </p>
+    <ul class="list-disc pl-5">
+      <li>
+        赵帅（软件开发）、段博译（网站开发）、周海（视频设计）、马维（UI设计）
+      </li>
+      <li>付法云（商业运营）、李江埕（用户运营）、李海杰（软件运维）</li>
+    </ul>
   </div>
 
   <!-- 图片放大模态框 -->
   <div
-    id="lightbox"
+    id="lightBox"
     class="fixed inset-0 z-[1000] hidden items-center justify-center bg-black/90"
   >
     <img
-      id="lightboxImg"
+      id="lightBoxImg"
       class="max-w-[90vw] max-h-[90vh] object-contain"
       src=""
       alt="放大预览图"
@@ -79,8 +92,8 @@ import { postImages } from "../../data/postDatas";
   const pageIndicator = document.getElementById("pageIndicator");
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
+  const lightBox = document.getElementById("lightBox");
+  const lightBoxImg = document.getElementById("lightBoxImg");
 
   const totalImages = postImages.length;
   let currentIndex = 0;
@@ -177,6 +190,9 @@ import { postImages } from "../../data/postDatas";
 
   // ========== 按钮事件 ==========
   function bindButtonEvents() {
+    // 模态框打开时，不处理轮播的键盘事件
+    if (lightBox && !lightBox.classList.contains("hidden")) return;
+
     if (prevBtn) {
       prevBtn.onclick = () => {
         stopAutoPlay();
@@ -192,29 +208,29 @@ import { postImages } from "../../data/postDatas";
     }
   }
 
-  // ========== Lightbox ==========
+  // ========== lightBox ==========
   if (carouselContainer) {
     carouselContainer.addEventListener("click", (e) => {
       const img = e.target.closest("img");
-      if (img && img.src && lightbox && lightboxImg) {
-        lightboxImg.src = img.src;
-        lightbox.classList.remove("hidden");
-        lightbox.classList.add("flex");
+      if (img && img.src && lightBox && lightBoxImg) {
+        lightBoxImg.src = img.src;
+        lightBox.classList.remove("hidden");
+        lightBox.classList.add("flex");
       }
     });
   }
 
-  if (lightbox) {
-    lightbox.addEventListener("click", () => {
-      lightbox.classList.add("hidden");
-      lightbox.classList.remove("flex");
+  if (lightBox) {
+    lightBox.addEventListener("click", () => {
+      lightBox.classList.add("hidden");
+      lightBox.classList.remove("flex");
       if (document.fullscreenElement) document.exitFullscreen();
     });
   }
 
   // ========== 键盘事件 ==========
   document.addEventListener("keydown", (e) => {
-    if (lightbox && !lightbox.classList.contains("hidden")) return;
+    if (lightBox && !lightBox.classList.contains("hidden")) return;
 
     if (e.key === "ArrowLeft") {
       stopAutoPlay();

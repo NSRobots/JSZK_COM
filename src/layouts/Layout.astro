@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 // layout.astro
+
+const hasSidebar = Astro.slots.has("sidebar");
 ---
 
 <!doctype html>
@@ -11,7 +13,19 @@ import "../styles/global.css";
     <title>键鼠智控，轻松一键，告别重复</title>
     <link rel="icon" type="image/x-icon" href="/ZK.ico" />
   </head>
-  <body>
+  <body class="font-sans text-gray-900 bg-white">
+    <slot name="header" />
+
+    <!-- 左侧侧边栏 -->
+    {
+      hasSidebar && (
+        <aside class="md:w-64 bg-gray-50 border-b md:border-r border-gray-200 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:overflow-y-auto">
+          <div class="p-4">
+            <slot name="sidebar" />
+          </div>
+        </aside>
+      )
+    }
     <slot name="content" />
     <slot name="footer" />
   </body>

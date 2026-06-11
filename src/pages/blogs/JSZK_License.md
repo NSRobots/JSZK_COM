@@ -2,7 +2,6 @@
 title: '键鼠智控许可协议'
 pubDate: 2026-04-20
 description: '键鼠智控最终用户许可协议（ EULA ）'
-author: 'NSRobots，CZZM.TEAM'
 tags: ["license"]
 layout: ../../layouts/BlogLayout.astro
 ---

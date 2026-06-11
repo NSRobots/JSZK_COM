@@ -1,72 +1,229 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CubeButton from "../components/Buttons/CubeBtn.astro";
 import type { CubeBtn } from "../Interface/site";
-import { cubeBtns } from "../data/btnDatas";
 import DownloadModal from "../components/Modals/DownloadModal.astro";
+import {
+  constPath,
+  pageDataMap,
+  getBannerHeightCSS,
+} from "../data/pageDataMap";
 
 export async function getStaticPaths() {
-  return [
-    { params: { page: undefined } },
-    // { params: { page: "download" } },
-    { params: { page: "contact" } },
-  ];
+  return constPath;
 }
 
 const { page } = Astro.params;
 const pageKey = page ?? "index";
 
-interface PageData {
-  title: string;
-  buttons: CubeBtn[] | null;
-  typingLines: string[];
-  showBack: boolean;
-  logoLinked: boolean;
-  typingFontClass: string;
-}
-
-const pageDataMap: Record<string, PageData> = {
-  index: {
-    title: "键鼠智控",
-    buttons: cubeBtns,
-    typingLines: ["轻松一键,", "告别所有重复操作"],
-    showBack: false,
-    logoLinked: false,
-    typingFontClass: "text-3xl",
-  },
-  // download: {
-  //   title: "键鼠智控",
-  //   buttons: dlChannels,
-  //   typingLines: ["请选择下载方式", '("微软商店"仅支持Windows10+系统)'],
-  //   showBack: true,
-  //   logoLinked: false,
-  //   typingFontClass: "text-[18px] md:text-[28px]",
-  // },
-  contact: {
-    title: "商业合作",
-    buttons: null,
-    typingLines: [
-      "如果您认为这是一款不错的软件,",
-      "那么我们携手让键鼠智控走向更大的舞台🥰",
-      "创赵智码官网：http://czzm.team",
-      "软件交流互助QQ群：516765146",
-      "官方客服QQ：92649808",
-      "电子邮箱：czhaozm@qq.com",
-      "微信公众号/抖音/哔哩哔哩：创赵智码",
-    ],
-    showBack: true,
-    logoLinked: true,
-    typingFontClass: "text-[18px] md:text-[28px]",
-  },
-};
-
 const data = pageDataMap[pageKey];
+const bannerHeight = getBannerHeightCSS(data.height);
 
 function getModalId(label: string): string {
   return `modal-${label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`;
 }
 ---
+
+<Layout>
+  {pageKey !== "index" && <Header slot="header" />}
+
+  <div
+    id="banner"
+    slot="content"
+    style={`min-height: var(--banner-h, ${bannerHeight.base}); padding-left: 24px; padding-right: 24px; ${data.boxStyle}`}
+    class="banner-body pb-10"
+  >
+    <!-- 返回首页 -->
+    {
+      data.showBack && (
+        <a
+          href="/"
+          class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 hover:text-[var(--white)] transition-colors duration-300"
+          aria-label="返回首页"
+        >
+          &lt;--
+        </a>
+      )
+    }
+
+    <!-- 语言标签 -->
+    {
+      data.showJSZK && (
+        <p class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none">
+          JSZK
+        </p>
+      )
+    }
+
+    <!-- logo & title -->
+    <div
+      class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
+    >
+      {
+        data.logoLinked ? (
+          <a href="/" class="inline-flex items-center justify-center gap-2">
+            {data.showTitleLogo && (
+              <img src="/ZK.ico" class="w-[56px] h-[56px] object-contain" />
+            )}
+            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
+              {data.title}
+            </h1>
+          </a>
+        ) : (
+          <>
+            {data.showTitleLogo && (
+              <img src="/ZK.ico" class="w-[56px] h-[56px] object-contain" />
+            )}
+            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
+              {data.title}
+            </h1>
+          </>
+        )
+      }
+    </div>
+
+    <!-- typing area -->
+    <div
+      id="typing-container"
+      class="animate-fade-in-up text-center min-h-[120px] w-full text-[var(--white)] mt-10 mb-10 leading-[1.8]"
+      data-sections={JSON.stringify(data.typingSections)}
+      data-first-delay={320}
+      data-between-lines-delay={100}
+      data-between-sections-delay={10}
+    >
+    </div>
+
+    <!-- button box -->
+    {
+      data.buttons && (
+        <div class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4">
+          {data.buttons.map((btn: CubeBtn) => (
+            <CubeButton item={btn} />
+          ))}
+        </div>
+      )
+    }
+    {
+      data.buttons
+        ?.filter((btn) => btn.isModal)
+        .map((btn: CubeBtn) => {
+          const modalId = getModalId(btn.label);
+          return <DownloadModal modalId={modalId} />;
+        })
+    }
+    <!-- 响应式高度：根据断点动态设置 --banner-h -->
+    {
+      bannerHeight.mediaQueries && (
+        <style set:html={bannerHeight.mediaQueries} />
+      )
+    }
+  </div>
+
+  <Footer slot="footer" />
+</Layout>
+
+<script>
+  async function delay(ms: number) {
+    return await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeText(
+    element: HTMLElement,
+    text: string,
+    lineIndex: number,
+    speed: number,
+    firstDelayTime: number,
+  ) {
+    for (let i = 0; i < text.length; i++) {
+      // 首页第一行第三个字后延迟（保留原有特殊逻辑）
+      if (lineIndex === 0 && i === 2) {
+        await delay(firstDelayTime);
+      }
+      element.textContent += text.charAt(i);
+      await delay(speed);
+    }
+  }
+
+  async function startTyping() {
+    const container = document.getElementById("typing-container");
+    if (!container) return;
+
+    // 从data属性读取配置
+    const sections: Array<{
+      lines: string[];
+      typingClass: string;
+      typingSpeed?: number;
+    }> = JSON.parse(container.dataset.sections || "[]");
+
+    const firstDelayTime = parseInt(container.dataset.firstDelay || "320", 10);
+    const betweenLinesDelay = parseInt(
+      container.dataset.betweenLinesDelay || "400",
+      10,
+    );
+    const betweenSectionsDelay = parseInt(
+      container.dataset.betweenSectionsDelay || "600",
+      10,
+    );
+
+    // 清空容器
+    container.innerHTML = "";
+
+    // 逐段处理
+    for (let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+      const section = sections[sectionIndex];
+      const speed = section.typingSpeed ?? 50;
+
+      // 创建段落容器，应用当前段的字体样式
+      const sectionContainer = document.createElement("div");
+      sectionContainer.className = section.typingClass;
+      container.appendChild(sectionContainer);
+
+      // 创建当前段的所有行元素
+      const typedElements: HTMLElement[] = [];
+      section.lines.forEach((lineText) => {
+        const p = document.createElement("p");
+        p.className = "typing-line";
+        sectionContainer.appendChild(p);
+        typedElements.push(p);
+      });
+
+      // 逐行动画
+      for (let i = 0; i < typedElements.length; i++) {
+        const el = typedElements[i];
+        el.classList.add("typing-cursor");
+        await typeText(el, section.lines[i], i, speed, firstDelayTime);
+        el.classList.remove("typing-cursor");
+
+        if (i < typedElements.length - 1) {
+          await delay(betweenLinesDelay);
+        }
+      }
+
+      // 段与段之间的延迟（最后一段不需要）
+      if (sectionIndex < sections.length - 1) {
+        await delay(betweenSectionsDelay);
+      }
+    }
+  }
+
+  // 页面加载完成后启动动画
+  document.addEventListener("DOMContentLoaded", startTyping);
+
+  // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
+  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const modalId = (trigger as HTMLElement).dataset.modalTrigger;
+      if (modalId) {
+        const dialog = document.getElementById(
+          modalId,
+        ) as HTMLDialogElement | null;
+        dialog?.showModal();
+      }
+    });
+  });
+</script>
 
 <style>
   /* 弧形分隔复用 */
@@ -93,162 +250,3 @@ function getModalId(label: string): string {
     }
   }
 </style>
-
-<Layout>
-  <div
-    slot="content"
-    style="padding-top: 140px; padding-left: 24px; padding-right: 24px;"
-    class="banner-body pb-10"
-  >
-    <!-- 返回首页 -->
-    {
-      data.showBack && (
-        <a
-          href="/"
-          class="animate-fade-in-up absolute top-10 left-10 text-lg text-[var(--gray)] px-4 hover:text-[var(--white)] transition-colors duration-300"
-          aria-label="返回首页"
-        >
-          &lt;--
-        </a>
-      )
-    }
-
-    <!-- 语言标签 -->
-    <p
-      class="animate-fade-in-up absolute top-10 right-10 text-lg text-[var(--gray)] px-4 pointer-events-none"
-    >
-      JSZK
-    </p>
-
-    <!-- logo & title -->
-    <div
-      class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
-    >
-      {
-        data.logoLinked ? (
-          <a href="/" class="inline-flex items-center justify-center gap-2">
-            <img
-              src="/ZK.ico"
-              alt="键鼠智控"
-              class="w-[56px] h-[56px] object-contain"
-            />
-            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
-              {data.title}
-            </h1>
-          </a>
-        ) : (
-          <>
-            <img
-              src="/ZK.ico"
-              alt="键鼠智控"
-              class="w-[56px] h-[56px] object-contain"
-            />
-            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
-              {data.title}
-            </h1>
-          </>
-        )
-      }
-    </div>
-
-    <!-- typing area -->
-    <div
-      id="typing-container"
-      class={`animate-fade-in-up text-center min-h-[120px] w-full text-[var(--white)] mt-10 mb-10 leading-[1.8] ${data.typingFontClass}`}
-      data-lines={JSON.stringify(data.typingLines)}
-    >
-    </div>
-
-    <!-- button box -->
-    {
-      data.buttons && (
-        <div class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4">
-          {data.buttons.map((btn: CubeBtn) => (
-            <CubeButton item={btn} />
-          ))}
-        </div>
-      )
-    }
-    {
-      data.buttons
-        ?.filter((btn) => btn.isModal)
-        .map((btn: CubeBtn) => {
-          const modalId = getModalId(btn.label);
-          return <DownloadModal modalId={modalId} />;
-        })
-    }
-  </div>
-
-  <Footer slot="footer" />
-</Layout>
-
-<script>
-  const speed = 50; // 打字速度（毫秒/字）
-  const firstDelayTime = 320;
-  const betweenLinesDelay = 400;
-
-  async function delay(ms: number) {
-    return await new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async function typeText(
-    element: HTMLElement,
-    text: string,
-    lineIndex: number,
-  ) {
-    for (let i = 0; i < text.length; i++) {
-      // 首页第一行第三个字后延迟
-      if (lineIndex === 0 && i === 2) {
-        await delay(firstDelayTime);
-      }
-      element.textContent += text.charAt(i);
-      await delay(speed);
-    }
-  }
-
-  async function startTyping() {
-    const container = document.getElementById("typing-container");
-    if (!container) return;
-
-    const lines: string[] = JSON.parse(container.dataset.lines || "[]");
-
-    // 清空容器并动态创建 p 标签
-    container.innerHTML = "";
-    const typedElements: HTMLElement[] = [];
-
-    lines.forEach((lineText) => {
-      const p = document.createElement("p");
-      p.className = "typing-line";
-      container.appendChild(p);
-      typedElements.push(p);
-    });
-
-    // 逐行动画
-    for (let i = 0; i < typedElements.length; i++) {
-      const el = typedElements[i];
-      el.classList.add("typing-cursor");
-      await typeText(el, lines[i], i);
-      el.classList.remove("typing-cursor");
-
-      if (i < typedElements.length - 1) {
-        await delay(betweenLinesDelay);
-      }
-    }
-  }
-
-  // 页面加载完成后启动动画
-  document.addEventListener("DOMContentLoaded", startTyping);
-
-  // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
-  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const modalId = (trigger as HTMLElement).dataset.modalTrigger;
-      if (modalId) {
-        const dialog = document.getElementById(
-          modalId,
-        ) as HTMLDialogElement | null;
-        dialog?.showModal();
-      }
-    });
-  });
-</script>
