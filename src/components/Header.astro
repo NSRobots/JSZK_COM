@@ -1,17 +1,29 @@
 ---
-import { commonItems, dlChannels } from "../data/btnDatas";
+import { commonItems } from "../data/btnDatas";
 import DownloadModal from "./Modals/DownloadModal.astro";
 
 // Header.astro - 顶部导航栏（桌面端 + 移动端侧边栏）
-// - isModal=false：渲染为 <a> 导航链接
-// - isModal=true ：渲染为 <button>，点击打开 Modal，内容通过命名 slot 传入
-
 function getModalId(label: string): string {
   return `modal-${label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`;
 }
 
-const items = Object.values(commonItems);
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+
+// 过滤当前的路由
+const items = Object.values(commonItems).filter((item) => {
+  // 保留：空href的Modal按钮（如下载）和所有外部链接
+  if (!item.href || item.href.startsWith("http")) {
+    return true;
+  }
+
+  // 统一去掉末尾斜杠后比较是否为当前路由
+  const itemPath = item.href.replace(/\/$/, "");
+  return itemPath !== currentPath;
+});
 const modalItems = items.filter((item) => item.isModal);
+
+// const items = Object.values(commonItems);
+// const modalItems = items.filter((item) => item.isModal);
 ---
 
 <div

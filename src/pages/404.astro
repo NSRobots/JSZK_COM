@@ -1,41 +1,34 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import CubeButton from "../components/Buttons/CubeBtn.astro";
-import type { CubeBtn } from "../Interface/site";
-import DownloadModal from "../components/Modals/DownloadModal.astro";
-import {
-  constPath,
-  pageDataMap,
-  getBannerHeightCSS,
-} from "../data/pageDataMap";
-console.log("载入当前界面");
-export async function getStaticPaths() {
-  return constPath;
-}
+import { getBannerHeightCSS } from "../data/pageDataMap";
 
-const { page } = Astro.params;
-const pageKey = page ?? "index";
-
-const data = pageDataMap[pageKey];
-
-// 未匹配到数据时重定向到 404 页面
-if (!data) {
-  console.log("未找到界面");
-  return Astro.redirect("/404");
-}
-
+const data = {
+  title: "404",
+  buttons: null,
+  height: { base: "480px", md: "540px", lg: "530px" },
+  typingSections: [
+    {
+      lines: ["哎呀，页面走丢了......", "未能找到您请求的路径"],
+      typingClass: "text-[18px] md:text-[22px] pb-6 md:pb-10",
+      typingSpeed: 35,
+    },
+    {
+      lines: ["请检查网址是否正确,", "或点击左上角箭头返回首页"],
+      typingClass: "text-[26px] md:text-[28px] pt-4 md:pt-6",
+      typingSpeed: 35,
+    },
+  ],
+  showBack: true,
+  showJSZK: true,
+  showTitleLogo: false,
+  logoLinked: false,
+  boxStyle: "padding-top: 60px;",
+};
 const bannerHeight = getBannerHeightCSS(data.height);
-
-function getModalId(label: string): string {
-  return `modal-${label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`;
-}
 ---
 
 <Layout>
-  {pageKey !== "index" && <Header slot="header" />}
-
   <div
     id="banner"
     slot="content"
@@ -72,27 +65,11 @@ function getModalId(label: string): string {
     <div
       class="animate-fade-in-up flex items-center justify-center gap-4 h-[68px]"
     >
-      {
-        data.logoLinked ? (
-          <a href="/" class="inline-flex items-center justify-center gap-2">
-            {data.showTitleLogo && (
-              <img src="/ZK.ico" class="w-[56px] h-[56px] object-contain" />
-            )}
-            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
-              {data.title}
-            </h1>
-          </a>
-        ) : (
-          <>
-            {data.showTitleLogo && (
-              <img src="/ZK.ico" class="w-[56px] h-[56px] object-contain" />
-            )}
-            <h1 class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1">
-              {data.title}
-            </h1>
-          </>
-        )
-      }
+      <h1
+        class="text-[48px] font-semibold text-[var(--white)] tracking-wider pd-1"
+      >
+        {data.title}
+      </h1>
     </div>
 
     <!-- typing area -->
@@ -106,25 +83,7 @@ function getModalId(label: string): string {
     >
     </div>
 
-    <!-- button box -->
-    {
-      data.buttons && (
-        <div class="animate-fade-in-up flex flex-row flex-wrap justify-center items-center gap-[45px] max-w-full px-4 ax-md:gap-[70px] max-md:px-4">
-          {data.buttons.map((btn: CubeBtn) => (
-            <CubeButton item={btn} />
-          ))}
-        </div>
-      )
-    }
-    {
-      data.buttons
-        ?.filter((btn) => btn.isModal)
-        .map((btn: CubeBtn) => {
-          const modalId = getModalId(btn.label);
-          return <DownloadModal modalId={modalId} />;
-        })
-    }
-    <!-- 响应式高度：根据断点动态设置 --banner-h -->
+    <!-- 响应式高度 -->
     {
       bannerHeight.mediaQueries && (
         <style set:html={bannerHeight.mediaQueries} />
@@ -148,7 +107,6 @@ function getModalId(label: string): string {
     firstDelayTime: number,
   ) {
     for (let i = 0; i < text.length; i++) {
-      // 首页第一行第三个字后延迟（保留原有特殊逻辑）
       if (lineIndex === 0 && i === 2) {
         await delay(firstDelayTime);
       }
@@ -161,7 +119,6 @@ function getModalId(label: string): string {
     const container = document.getElementById("typing-container");
     if (!container) return;
 
-    // 从data属性读取配置
     const sections: Array<{
       lines: string[];
       typingClass: string;
@@ -178,20 +135,16 @@ function getModalId(label: string): string {
       10,
     );
 
-    // 清空容器
     container.innerHTML = "";
 
-    // 逐段处理
     for (let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
       const section = sections[sectionIndex];
       const speed = section.typingSpeed ?? 50;
 
-      // 创建段落容器，应用当前段的字体样式
       const sectionContainer = document.createElement("div");
       sectionContainer.className = section.typingClass;
       container.appendChild(sectionContainer);
 
-      // 创建当前段的所有行元素
       const typedElements: HTMLElement[] = [];
       section.lines.forEach((lineText) => {
         const p = document.createElement("p");
@@ -200,7 +153,6 @@ function getModalId(label: string): string {
         typedElements.push(p);
       });
 
-      // 逐行动画
       for (let i = 0; i < typedElements.length; i++) {
         const el = typedElements[i];
         el.classList.add("typing-cursor");
@@ -212,32 +164,16 @@ function getModalId(label: string): string {
         }
       }
 
-      // 段与段之间的延迟（最后一段不需要）
       if (sectionIndex < sections.length - 1) {
         await delay(betweenSectionsDelay);
       }
     }
   }
 
-  // 页面加载完成后启动动画
   document.addEventListener("DOMContentLoaded", startTyping);
-
-  // 统一绑定所有 data-modal-trigger 的点击事件，打开对应 dialog
-  document.querySelectorAll("[data-modal-trigger]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const modalId = (trigger as HTMLElement).dataset.modalTrigger;
-      if (modalId) {
-        const dialog = document.getElementById(
-          modalId,
-        ) as HTMLDialogElement | null;
-        dialog?.showModal();
-      }
-    });
-  });
 </script>
 
 <style>
-  /* 弧形分隔复用 */
   .banner-body {
     position: relative;
     background-color: var(--primary);

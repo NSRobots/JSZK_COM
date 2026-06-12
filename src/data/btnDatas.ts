@@ -37,6 +37,11 @@ export const commonItems: Record<string, ButtonItem> = {
     isRedirect: false,
     isModal: false,
   },
+  devs: {
+    href: "/L2Pages/L2Index/",
+    isModal: false,
+    label: "开发信息",
+  },
 };
 
 export const cubeBtns: CubeBtn[] = [
@@ -80,9 +85,7 @@ export const cubeBtns: CubeBtn[] = [
     iconSvg: `<p style="font-size: 23px; font-weight: bold;">CZZM</p>`,
   },
   {
-    href: "./L2Pages/L2Index/",
-    isModal: false,
-    label: "开发信息",
+    ...commonItems.devs,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
     isRedirect: false,

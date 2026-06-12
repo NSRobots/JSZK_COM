@@ -34,14 +34,14 @@ export const pageDataMap: Record<string, PageData> = {
   custom: {
     title: "企业定制",
     buttons: null,
-    height: { base: "450px", md: "520px", lg: "520px" },
+    height: { base: "450px", md: "540px", lg: "530px" },
     typingSections: [
       {
         lines: [
           "♥️ 如果您认为这是一款不错的软件,",
           "那么我们携手让其走向更大的舞台",
         ],
-        typingClass: "text-[20px] md:text-[28px] pb-8",
+        typingClass: "text-[20px] md:text-[28px] pb-8 md:pd-12",
         typingSpeed: 25,
       },
       {
@@ -50,7 +50,7 @@ export const pageDataMap: Record<string, PageData> = {
           "官方客服QQ：92649808",
           "电子邮箱：czhaozm@qq.com",
         ],
-        typingClass: "text-[16px] md:text-[24px] pt-8",
+        typingClass: "text-[16px] md:text-[24px] pt-8 md:pt-12",
         typingSpeed: 10,
       },
     ],
@@ -63,7 +63,7 @@ export const pageDataMap: Record<string, PageData> = {
     typingSections: [
       {
         lines: ["若您在使用中遇到问题,", "可以随时联系我们 ♥️ "],
-        typingClass: "text-[20px] md:text-[28px] pb-8",
+        typingClass: "text-[20px] md:text-[28px] pb-8 md:pd-12",
         typingSpeed: 25,
       },
       {
@@ -73,7 +73,7 @@ export const pageDataMap: Record<string, PageData> = {
           "电子邮箱：czhaozm@qq.com",
           "微信公众号/抖音/哔哩哔哩：创赵智码",
         ],
-        typingClass: "text-[16px] md:text-[24px] pt-8",
+        typingClass: "text-[16px] md:text-[24px] pt-8 md:pd-12",
         typingSpeed: 10,
       },
     ],
