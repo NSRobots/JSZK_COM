@@ -10,7 +10,6 @@ export const commonItems: Record<string, ButtonItem> = {
   download: {
     href: "",
     label: "下载",
-    isRedirect: false,
     isModal: true,
   },
   message: {
@@ -34,13 +33,14 @@ export const commonItems: Record<string, ButtonItem> = {
   team: {
     href: "http://czzm.team/",
     label: "团队官网",
-    isRedirect: false,
+    isRedirect: true,
     isModal: false,
   },
   devs: {
     href: "/L2Pages/L2Index/",
-    isModal: false,
     label: "开发信息",
+    isRedirect: false,
+    isModal: false,
   },
 };
 
@@ -52,21 +52,21 @@ export const cubeBtns: CubeBtn[] = [
     bgColor: "var(--primary-light)",
   },
   {
-    ...commonItems.manual,
-    itemColor: "var(--white)",
-    bgColor: "var(--primary-light)",
-    iconSvg: `<img
-                src="/logos/manual.png" 
-                class="w-[35px] h-[35px] object-contain"
-              />`,
-  },
-  {
     ...commonItems.message,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
     iconSvg: `<img
                 src="/logos/message.png" 
                 class="w-[30px] h-[30px] object-contain"
+              />`,
+  },
+  {
+    ...commonItems.manual,
+    itemColor: "var(--white)",
+    bgColor: "var(--primary-light)",
+    iconSvg: `<img
+                src="/logos/manual.png" 
+                class="w-[35px] h-[35px] object-contain"
               />`,
   },
   {
@@ -88,7 +88,6 @@ export const cubeBtns: CubeBtn[] = [
     ...commonItems.devs,
     itemColor: "var(--white)",
     bgColor: "var(--primary-light)",
-    isRedirect: false,
     iconSvg: `<img src="/logos/more.png" class="w-[40px] h-[40px] object-contain"/>`,
   },
 ];
@@ -98,7 +97,7 @@ export const dlChannels: CommonBtn[] = [
   {
     label: "微软应用商店",
     details: "仅支持Windows 10及以上操作系统",
-    href: "ms-windows-store://pdp/?productid=9P7LL3D9LF7B",
+    href: "https://apps.microsoft.com/detail/9P7LL3D9LF7B",
     iconSvg: `<img src="/logos/MSShop_color.png"  class="w-[40px] h-[40px] object-contain"/>`,
     itemColor: "var(--white)",
     bgColor: "var(--primary)",

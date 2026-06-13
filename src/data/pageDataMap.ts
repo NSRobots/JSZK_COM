@@ -34,7 +34,7 @@ export const pageDataMap: Record<string, PageData> = {
   custom: {
     title: "企业定制",
     buttons: null,
-    height: { base: "450px", md: "540px", lg: "530px" },
+    height: { base: "450px", md: "540px", lg: "540px" },
     typingSections: [
       {
         lines: [
@@ -68,7 +68,7 @@ export const pageDataMap: Record<string, PageData> = {
       },
       {
         lines: [
-          "QQ交流群：516765146",
+          "QQ交流互助群：516765146",
           "官方客服QQ：92649808",
           "电子邮箱：czhaozm@qq.com",
           "微信公众号/抖音/哔哩哔哩：创赵智码",
