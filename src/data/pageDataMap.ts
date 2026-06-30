@@ -41,7 +41,7 @@ export const pageDataMap: Record<string, PageData> = {
           "♥️ 如果您认为这是一款不错的软件,",
           "那么我们携手让其走向更大的舞台",
         ],
-        typingClass: "text-[20px] md:text-[28px] pb-8 md:pd-12",
+        typingClass: "text-[18px] md:text-[28px] pb-8 md:pd-12",
         typingSpeed: 25,
       },
       {
@@ -59,7 +59,7 @@ export const pageDataMap: Record<string, PageData> = {
   contact: {
     title: "联系我们",
     buttons: null,
-    height: { base: "480px", md: "570px", lg: "570px" },
+    height: { base: "500px", md: "570px", lg: "570px" },
     typingSections: [
       {
         lines: ["若您在使用中遇到问题,", "可以随时联系我们 ♥️ "],

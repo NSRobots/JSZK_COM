@@ -36,7 +36,7 @@ const modalId = `modal-${item.label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`
           class="flex items-center justify-center w-10 h-10
                        [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
         />
-        <p>{item.label}</p>
+        <p class="text-center text-l lg:text-xl">{item.label}</p>
       </button>
     ) : (
       <a
@@ -52,7 +52,7 @@ const modalId = `modal-${item.label.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")}`
           class="flex items-center justify-center w-10 h-10
                      [&_svg]:w-full [&_svg]:h-full [&_svg]:block"
         />
-        <p>{item.label}</p>
+        <p class="text-center text-l lg:text-xl">{item.label}</p>
       </a>
     )
   }
